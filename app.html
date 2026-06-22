@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Celleste inc — Навыки</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="firebaseConfig.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0d14;--surface:rgba(22,27,34,.7);--border:#30363d;--gold:#f0c040;--text:#e1e4e8;--dim:#8b949e;--green:#56d364;--blue:#79c0ff;--orange:#f0883e;--red:#f85149}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* topbar */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;gap:10px;padding:8px 16px;
+  background:rgba(11,13,20,.88);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(48,54,61,.5);flex-wrap:wrap;
+}
+.brand{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.brand .c{
+  width:30px;height:30px;border-radius:8px;
+  background:linear-gradient(135deg,#f0c040,#d29922);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:15px;color:#0b0d14;flex-shrink:0;
+}
+.brand h1{font-size:15px;font-weight:800}
+.brand h1 span{color:var(--gold)}
+.right{display:flex;align-items:center;gap:8px;margin-left:auto}
+.badge{padding:2px 8px;border-radius:12px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.ba{border:1px solid rgba(240,192,64,.25);background:rgba(240,192,64,.1);color:var(--gold)}
+.be{border:1px solid rgba(88,166,255,.25);background:rgba(88,166,255,.08);color:var(--blue)}
+.bv{border:1px solid rgba(139,148,158,.2);background:rgba(139,148,158,.08);color:var(--dim)}
+.avatar{width:28px;height:28px;border-radius:50%;object-fit:cover;background:#21262d;border:1px solid var(--border)}
+.btn{
+  display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:7px;
+  border:1px solid var(--border);background:#21262d;color:var(--text);
+  font-size:11px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .12s;text-decoration:none;
+}
+.btn:hover{background:#30363d;border-color:#484f58}
+.btn-gold{background:linear-gradient(135deg,#f0c040,#d29922);color:#0b0d14;border-color:#f0c040;font-weight:600}
+.btn-gold:hover{filter:brightness(1.08)}
+.btn-red{border-color:#da3633;color:var(--red)}
+.btn-red:hover{background:#da3633;color:#fff}
+.btn-sm{padding:4px 8px;font-size:10px}
+.btn-ghost{background:transparent;border-color:transparent}
+.btn-ghost:hover{background:rgba(255,255,255,.04)}
+
+/* main */
+.container{padding:12px 16px}
+
+.stats{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:8px;margin-bottom:14px;
+}
+.s{
+  background:var(--surface);backdrop-filter:blur(8px);
+  border:1px solid rgba(48,54,61,.5);border-radius:10px;
+  padding:12px 14px;position:relative;overflow:hidden;transition:all .2s;
+}
+.s:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.s::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.s:nth-child(1)::before{background:linear-gradient(90deg,#2ea043,#56d364)}
+.s:nth-child(2)::before{background:linear-gradient(90deg,#58a6ff,#79c0ff)}
+.s:nth-child(3)::before{background:linear-gradient(90deg,#f0c040,#f5d06a)}
+.s:nth-child(4)::before{background:linear-gradient(90deg,#d29922,#e3b341)}
+.s:nth-child(5)::before{background:linear-gradient(90deg,#e06c00,#f0883e)}
+.s:nth-child(6)::before{background:linear-gradient(90deg,#da3633,#f85149)}
+.s .n{font-size:20px;font-weight:800;line-height:1.2}
+.s .l{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+.tools{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.search{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(13,17,23,.6);border:1px solid var(--border);
+  border-radius:7px;padding:5px 10px;flex:1;min-width:140px;max-width:260px;
+}
+.search input{background:none;border:none;outline:none;color:var(--text);font:inherit;font-size:11px;width:100%}
+.search input::placeholder{color:#484f58}
+.count{font-size:11px;color:#484f58;margin-left:auto}
+
+.legend{
+  display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+  padding:7px 12px;margin-bottom:10px;
+  background:rgba(22,27,34,.35);border-radius:8px;border:1px solid rgba(48,54,61,.25);
+}
+.leg-i{display:flex;align-items:center;gap:3px;font-size:11px;color:#c9d1d9}
+.dot{width:10px;height:10px;border-radius:2px}
+
+.tw{
+  border-radius:12px;overflow:hidden;
+  border:1px solid rgba(48,54,61,.35);
+  background:rgba(22,27,34,.4);backdrop-filter:blur(4px);
+}
+.ts{overflow-x:auto;overflow-y:auto;max-height:calc(100vh - 280px)}
+.ts::-webkit-scrollbar{height:5px;width:5px}
+.ts::-webkit-scrollbar-track{background:transparent}
+.ts::-webkit-scrollbar-thumb{background:rgba(48,54,61,.4);border-radius:3px}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:12px;min-width:max-content}
+thead{position:sticky;top:0;z-index:10}
+th{
+  background:rgba(22,27,34,.98);padding:7px 3px;font-weight:600;font-size:9px;
+  text-transform:uppercase;letter-spacing:.5px;color:var(--dim);
+  text-align:center;white-space:nowrap;
+  border-bottom:2px solid rgba(48,54,61,.5);
+  border-right:1px solid rgba(48,54,61,.15);
+}
+th:last-child{border-right:none}
+th:first-child{min-width:22px;width:22px;position:sticky;left:0;z-index:11}
+th:nth-child(2){text-align:left;padding-left:8px;min-width:130px;position:sticky;left:22px;z-index:11}
+th .a{display:block;font-size:12px;letter-spacing:0;margin-top:1px}
+td{padding:4px 3px;text-align:center;border-bottom:1px solid rgba(48,54,61,.12);border-right:1px solid rgba(48,54,61,.06);white-space:nowrap;vertical-align:middle;font-size:12px}
+td:last-child{border-right:none}
+td:first-child{font-weight:700;min-width:22px;width:22px;position:sticky;left:0;z-index:2}
+td:nth-child(2){text-align:left;padding-left:8px;min-width:130px;position:sticky;left:22px;z-index:2}
+.sr td{background:rgba(240,192,64,.03)!important;border-bottom:2px solid rgba(240,192,64,.2)!important;font-weight:700;color:var(--gold);font-size:12px}
+
+.ci{
+  width:100%;max-width:32px;padding:2px 1px;text-align:center;
+  background:transparent;border:1px solid transparent;border-radius:3px;
+  color:inherit;font:inherit;font-weight:600;outline:none;transition:all .1s;
+}
+.ci:focus{border-color:var(--gold);background:rgba(240,192,64,.08)}
+.ci.s5{color:var(--green)}.ci.s4{color:var(--blue)}.ci.s3{color:#e3b341}.ci.s2{color:var(--orange)}.ci.s1{color:var(--red)}.ci.s0{color:#484f58}
+.ni{
+  width:100%;min-width:70px;padding:2px 4px;
+  background:transparent;border:1px solid transparent;border-radius:3px;
+  color:var(--text);font:inherit;font-weight:600;outline:none;
+}
+.ni:focus{border-color:var(--gold);background:rgba(240,192,64,.06)}
+.tb{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:20px;padding:0 4px;border-radius:4px;
+  font-size:10px;font-weight:700;
+}
+.tbh{background:rgba(46,160,67,.15);color:var(--green)}
+.tbm{background:rgba(210,153,34,.15);color:#e3b341}
+.tbl{background:rgba(218,54,51,.15);color:var(--red)}
+
+/* modal */
+.modal{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,.55);backdrop-filter:blur(6px);
+  z-index:200;display:none;align-items:center;justify-content:center;
+}
+.modal-box{
+  background:#161b22;border:1px solid var(--border);
+  border-radius:14px;padding:24px;width:500px;max-width:92vw;max-height:85vh;overflow-y:auto;
+}
+.modal-box h2{font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.mc{float:right;background:none;border:none;color:var(--dim);font-size:20px;cursor:pointer}
+.mt{width:100%;border-collapse:collapse;font-size:12px}
+.mt td,.mt th{padding:6px 8px;border-bottom:1px solid rgba(48,54,61,.3);text-align:left}
+.mt th{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+.mt input,.mt select{background:rgba(13,17,23,.6);border:1px solid var(--border);border-radius:4px;padding:4px 6px;color:var(--text);font:inherit;font-size:12px;width:100%;outline:none}
+.mt input:focus,.mt select:focus{border-color:var(--gold)}
+.del{cursor:pointer;color:var(--red);font-size:16px;opacity:.5;transition:.15s}
+.del:hover{opacity:1}
+
+.toast{
+  position:fixed;bottom:16px;right:16px;z-index:9999;
+  padding:8px 14px;border-radius:6px;font-size:11px;font-weight:500;
+  transform:translateY(70px);opacity:0;
+  transition:all .3s;pointer-events:none;
+}
+.toast.show{transform:translateY(0);opacity:1}
+.toast-ok{background:#2ea043;color:#fff}
+.toast-err{background:#da3633;color:#fff}
+.toast-info{background:#1c2333;color:var(--text);border:1px solid var(--border)}
+
+@media(max-width:768px){
+  .container{padding:8px 10px}
+  .stats{grid-template-columns:repeat(3,1fr);gap:5px}
+  .s{padding:8px 10px}.s .n{font-size:16px}
+  .topbar{padding:6px 10px}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">
+    <div class="c">C</div>
+    <h1>Celleste <span>inc</span></h1>
+  </div>
+  <div class="right">
+    <span class="badge ba" id="roleBadge" style="display:none">admin</span>
+    <img class="avatar" id="userAvatar" src="" alt="">
+    <span style="font-size:11px;color:var(--dim)" id="userName"></span>
+    <button class="btn btn-ghost btn-sm" onclick="openModals()" id="modBtn" style="display:none">⚙️ Модераторы</button>
+    <button class="btn btn-sm btn-red" onclick="logout()">Выйти</button>
+  </div>
+</div>
+
+<div class="container">
+  <div class="stats" id="stats"></div>
+
+  <div class="tools">
+    <div class="search">
+      <span style="color:#484f58;font-size:12px">🔍</span>
+      <input type="text" id="search" placeholder="Поиск..." oninput="render()">
+    </div>
+    <span class="count" id="count"></span>
+  </div>
+
+  <div class="legend">
+    <span style="font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.3px">Шкала</span>
+    <span class="leg-i"><span class="dot" style="background:#2ea043"></span>5</span>
+    <span class="leg-i"><span class="dot" style="background:#58a6ff"></span>4</span>
+    <span class="leg-i"><span class="dot" style="background:#d29922"></span>3</span>
+    <span class="leg-i"><span class="dot" style="background:#e06c00"></span>2</span>
+    <span class="leg-i"><span class="dot" style="background:#da3633"></span>1</span>
+    <span class="leg-i"><span class="dot" style="background:#30363d"></span>—</span>
+    <span style="color:#484f58;font-size:10px">·</span>
+    <span class="leg-i" style="color:#8b949e">🟢 ≥100</span>
+    <span class="leg-i" style="color:#8b949e">🟡 60–99</span>
+    <span class="leg-i" style="color:#8b949e">🔴 &lt;60</span>
+  </div>
+
+  <div class="tw">
+    <div class="ts" id="tableScroll">
+      <table><thead id="thead"></thead><tbody id="tbody"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modModal">
+  <div class="modal-box">
+    <button class="mc" onclick="closeModal()">×</button>
+    <h2>⚙️ Управление модераторами</h2>
+    <table class="mt"><thead><tr><th>Email</th><th>Роль</th><th></th></tr></thead><tbody id="modTbody"></tbody></table>
+    <div style="margin-top:10px;display:flex;gap:6px">
+      <button class="btn btn-sm" onclick="addModRow()">➕ Добавить</button>
+      <button class="btn btn-sm btn-gold" onclick="saveMods()">💾 Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SKILLS = ['Сила','Стрельба','Кулинария','Рыбалка','Охота','Поиск сокровищ','Ферма','Стройка','Шахта','Порт','Такси','Дайвер','Инкассатор','Автобус','Пожарный','Механик','Дальнобой','Курьер','Почта','Подрядчик','Байкер','Мэривез','Кармит','Реднэк','Эпсилон'];
+const EMOJI = ['💪','🎯','🍳','🎣','🏹','🗺️','🌾','🏗️','⛏️','⚓','🚕','🤿','💰','🚌','🔥','🔧','🚛','📦','✉️','📋','🏍️','🛡️','👗','🤠','🌀'];
+const ABBR = ['Сил','Стр','Кул','Рыб','Ох','Сок','Фер','Стр','Шах','Пор','Так','Дай','Инк','Авт','Пож','Мех','Дал','Кур','Поч','Под','Бай','Мэр','Кар','Ред','Эпс'];
+
+let user = JSON.parse(sessionStorage.getItem('celleste_user'));
+if(!user){location.href='index.html';throw'no auth'}
+
+const isAdmin = user.role === 'admin';
+const isEditor = user.role === 'admin' || user.role === 'editor';
+
+document.getElementById('roleBadge').textContent = user.role;
+document.getElementById('roleBadge').style.display = 'inline';
+document.getElementById('roleBadge').className = 'badge ' + (user.role==='admin'?'ba':user.role==='editor'?'be':'bv');
+document.getElementById('userAvatar').src = user.photo || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23484f58"%3E%3Cpath d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/%3E%3C/svg%3E';
+document.getElementById('userName').textContent = user.name;
+
+if(isAdmin) document.getElementById('modBtn').style.display='inline';
+
+let employees = [];
+let unsubscribe = null;
+
+function init(){
+  buildHeader();
+  unsubscribe = db.collection('employees').onSnapshot(snap=>{
+    employees = [];
+    snap.forEach(doc => employees.push({id:doc.id, ...doc.data()}));
+    render();
+    renderStats();
+  }, err=>{toast('Ошибка загрузки: '+err.message,'err')});
+}
+
+function calcTotal(skills){return (skills||[]).reduce((s,v)=>{const n=Number(v);return s+(isNaN(n)?0:n)},0)}
+function cat(t){return t>=100?'high':t>=60?'mid':'low'}
+function sCol(v){
+  if(v===''||v===null||v===undefined)return'#484f58';const n=Number(v);
+  if(isNaN(n))return'#484f58';
+  if(n>=5)return'#56d364';if(n===4)return'#79c0ff';if(n===3)return'#e3b341';if(n===2)return'#f0883e';if(n===1)return'#f85149';
+  return'#484f58'
+}
+function sBg(v){
+  if(v===''||v===null||v===undefined)return'transparent';const n=Number(v);
+  if(isNaN(n))return'transparent';
+  if(n>=5)return'#0a2e16';if(n===4)return'#0c1d3e';if(n===3)return'#2a1f0a';if(n===2)return'#2a1408';if(n===1)return'#2a0a0a';
+  return'transparent'
+}
+function sCl(v){
+  if(v===''||v===null||v===undefined)return's0';const n=Number(v);
+  if(isNaN(n))return's0';
+  if(n>=5)return's5';if(n===4)return's4';if(n===3)return's3';if(n===2)return's2';if(n===1)return's1';
+  return's0'
+}
+
+function buildHeader(){
+  let h='<tr><th>#</th><th style="text-align:left;padding-left:8px">Сотрудник</th>';
+  SKILLS.forEach((n,i)=>{h+='<th title="'+n+'">'+EMOJI[i]+'<span class="a">'+ABBR[i]+'</span></th>'});
+  h+='<th style="width:24px"></th></tr>';
+  document.getElementById('thead').innerHTML=h;
+}
+
+function render(){
+  const q=document.getElementById('search').value.toLowerCase().trim();
+  let filtered=employees.filter(p=>(p.name||'').toLowerCase().includes(q));
+  const sorted=[...filtered].sort((a,b)=>calcTotal(b.skills)-calcTotal(a.skills));
+  const tb=document.getElementById('tbody');
+  let html='';
+  const skillCount=SKILLS.length;
+
+  const totalAll=sorted.reduce((s,p)=>s+calcTotal(p.skills),0);
+  let sc='';
+  for(let si=0;si<skillCount;si++){let sum=0;sorted.forEach(p=>{const n=Number((p.skills||[])[si]);if(!isNaN(n))sum+=n});sc+='<td style="background:rgba(240,192,64,.03)">'+(sum||'')+'</td>'}
+  html+='<tr class="sr"><td style="position:sticky;left:0;z-index:3">Σ</td><td style="position:sticky;left:22px;z-index:3;text-align:left;padding-left:8px"><span class="tb tbh">'+totalAll+'</span> Общий →</td>'+sc+'<td></td></tr>';
+
+  let prev=null;
+  sorted.forEach((p,idx)=>{
+    const t=calcTotal(p.skills),c=cat(t);
+    if(prev&&c!==prev){const lb={high:'🏆 Идеал (100%+)',mid:'📈 Норма (60–99)',low:'🔻 Ещё пахать (<60)'};html+='<tr><td colspan="'+(skillCount+3)+'" style="background:rgba(28,35,51,.45);padding:5px 10px;font-weight:700;font-size:10px;letter-spacing:.4px;text-transform:uppercase;border-top:2px solid rgba(48,54,61,.45);color:#8b949e;text-align:left">'+lb[c]+'</td></tr>'}
+    prev=c;
+    const even=idx%2===1;
+    const bg=c==='high'?(even?'#0d1f0d':'#0a1a0a'):c==='mid'?(even?'#181f0d':'#141a0a'):(even?'#1f0d0d':'#1a0a0a');
+    const tcl=t>=100?'#56d364':t>=60?'#e3b341':'#f85149';
+    const tbg=t>=100?'rgba(46,160,67,.15)':t>=60?'rgba(210,153,34,.15)':'rgba(218,54,51,.15)';
+    html+='<tr style="background:'+bg+'"><td style="background:'+bg+';position:sticky;left:0;z-index:2">'+(idx+1)+'</td><td style="background:'+bg+';position:sticky;left:22px;z-index:2;text-align:left;padding-left:8px">';
+    if(isEditor){
+      html+='<input class="ni" value="'+esc(p.name||'')+'" data-id="'+p.id+'" onchange="onName(this)" onkeydown="if(event.key==\'Enter\')this.blur()">';
+    }else{
+      html+='<span style="display:inline-flex;align-items:center;gap:5px;font-weight:600"><span class="tb" style="background:'+tbg+';color:'+tcl+'">'+t+'</span>'+esc(p.name||'')+'</span>';
+    }
+    html+='</td>';
+    for(let si=0;si<skillCount;si++){
+      const v=(p.skills||[])[si];const val=(v===''||v===null||v===undefined)?'':v;
+      if(isEditor){
+        html+='<td style="background:'+sBg(v)+'"><input class="ci '+sCl(v)+'" type="text" maxlength="3" value="'+val+'" data-id="'+p.id+'" data-si="'+si+'" onchange="onSkill(this)" onkeydown="if(event.key==\'Enter\')this.blur()"></td>';
+      }else{
+        html+='<td style="background:'+sBg(v)+';color:'+sCol(v)+';font-weight:600">'+val+'</td>';
+      }
+    }
+    html+='<td>';
+    if(isEditor)html+='<span style="cursor:pointer;color:#484f58;font-size:14px;opacity:.3;transition:.15s" onclick="delRow(\''+p.id+'\',\''+esc(p.name||'')+'\')" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.3">×</span>';
+    html+='</td></tr>';
+  });
+  tb.innerHTML=html;
+  document.getElementById('count').textContent=sorted.length+' / '+employees.length;
+}
+
+function renderStats(){
+  const totals=employees.map(p=>calcTotal(p.skills));
+  const total=totals.length,sum=totals.reduce((a,b)=>a+b,0),avg=total?(sum/total).toFixed(1):0,max=total?Math.max(...totals):0;
+  const ideal=totals.filter(v=>v>=100).length,normal=totals.filter(v=>v>=60&&v<100).length,low=totals.filter(v=>v<60).length;
+  document.getElementById('stats').innerHTML=
+    '<div class="s"><div class="n" style="color:#56d364">'+total+'</div><div class="l">Сотрудников</div></div>'+
+    '<div class="s"><div class="n" style="color:#79c0ff">'+avg+'</div><div class="l">Средний балл</div></div>'+
+    '<div class="s"><div class="n" style="color:#f0c040">'+max+'</div><div class="l">Лучший</div></div>'+
+    '<div class="s"><div class="n" style="color:#56d364">'+ideal+'</div><div class="l">⭐ Идеал</div><div style="font-size:9px;color:#484f58">'+(total?(ideal/total*100).toFixed(0):0)+'%</div></div>'+
+    '<div class="s"><div class="n" style="color:#e3b341">'+normal+'</div><div class="l">📈 Норма</div><div style="font-size:9px;color:#484f58">'+(total?(normal/total*100).toFixed(0):0)+'%</div></div>'+
+    '<div class="s"><div class="n" style="color:#f85149">'+low+'</div><div class="l">🔻 Ещё пахать</div><div style="font-size:9px;color:#484f58">'+(total?(low/total*100).toFixed(0):0)+'%</div></div>';
+}
+
+async function onName(el){
+  const id=el.dataset.id,v=el.value.trim()||'Без имени';
+  await db.collection('employees').doc(id).update({name:v});
+  toast('Сохранено','ok');
+}
+async function onSkill(el){
+  const id=el.dataset.id,si=Number(el.dataset.si);
+  let raw=el.value.trim();
+  if(raw===''){await db.collection('employees').doc(id).update({[`skills.${si}`]:''});return}
+  const n=Number(raw);
+  if(!isNaN(n)&&n>=0&&n<=99){
+    await db.collection('employees').doc(id).update({[`skills.${si}`]:n});
+  }else{toast('Число от 0 до 99','err');el.value=''}
+}
+
+async function addRow(){
+  await db.collection('employees').add({name:'Новый сотрудник',skills:Array(SKILLS.length).fill('')});
+  toast('➕ Добавлено','ok');
+}
+async function delRow(id,name){
+  if(!confirm('Удалить "'+name+'"?'))return;
+  await db.collection('employees').doc(id).delete();
+  toast('Удалено','info');
+}
+function logout(){sessionStorage.clear();location.href='index.html'}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function toast(msg,t){
+  const el=document.getElementById('toast');el.textContent=msg;
+  el.className='toast toast-'+t+' show';
+  clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2500);
+}
+
+// moderation
+async function openModals(){
+  document.getElementById('modModal').style.display='flex';
+  await renderMods();
+}
+function closeModal(){document.getElementById('modModal').style.display='none'}
+document.getElementById('modModal').addEventListener('click',function(e){if(e.target===this)closeModal()});
+
+async function renderMods(){
+  const snap=await db.collection('moderators').get();
+  let h='';
+  snap.forEach(doc=>{
+    const d=doc.data();
+    h+='<tr><td><input value="'+esc(d.email)+'" data-id="'+doc.id+'" class="me"></td>'+
+      '<td><select data-id="'+doc.id+'" class="mr">'+
+      '<option value="editor"'+(d.role==='editor'?' selected':'')+'>Редактор</option>'+
+      '<option value="viewer"'+(d.role==='viewer'?' selected':'')+'>Наблюдатель</option>'+
+      '</select></td>'+
+      '<td><span class="del" onclick="this.closest(\'tr\').remove()">×</span></td></tr>';
+  });
+  document.getElementById('modTbody').innerHTML=h;
+}
+function addModRow(){
+  const tb=document.getElementById('modTbody');
+  tb.insertAdjacentHTML('beforeend','<tr><td><input class="me" placeholder="email@domain.com"></td><td><select class="mr"><option value="editor">Редактор</option><option value="viewer">Наблюдатель</option></select></td><td><span class="del" onclick="this.closest(\'tr\').remove()">×</span></td></tr>');
+}
+async function saveMods(){
+  // удаляем всех существующих
+  const existing = await db.collection('moderators').get();
+  const batch = db.batch();
+  existing.forEach(doc => batch.delete(doc.ref));
+  await batch.commit();
+
+  // добавляем новых
+  const rows=document.querySelectorAll('#modTbody tr');
+  for(const tr of rows){
+    const email=tr.querySelector('.me').value.trim();
+    if(!email)continue;
+    await db.collection('moderators').add({email:email.toLowerCase(),role:tr.querySelector('.mr').value});
+  }
+  toast('✅ Модераторы сохранены','ok');
+}
+
+init();
+</script>
+</body>
+</html>
