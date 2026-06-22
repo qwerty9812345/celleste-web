@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Celleste — Семья</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">Celleste</div>
+    <div class="nav-links">
+      <a href="#home" class="active">Главная</a>
+      <a href="#about">О семье</a>
+      <a href="#principles">Постулаты</a>
+      <a href="#members">Состав семьи</a>
+      <a href="#join">Присоединиться</a>
+      <a href="#internal" class="verified-only" style="display:none">Внутреннее</a>
+    </div>
+    <div class="nav-auth">
+      <div id="userInfo" style="display:none">
+        <span id="userName"></span>
+        <button id="logoutBtn" class="btn-sm">Выйти</button>
+      </div>
+      <button id="loginBtn" class="btn-primary">Войти через Discord</button>
+    </div>
+  </nav>
+
+  <main>
+    <section id="home" class="section active-section">
+      <div class="hero">
+        <img src="https://i.postimg.cc/VkbLk8fZ/banner.png" alt="Celleste" class="hero-banner" onerror="this.style.display='none'">
+        <h1>Добро пожаловать в семью Celleste</h1>
+        <p class="tagline">Вместе мы — сила. Наша семья строится на доверии, уважении и развитии.</p>
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <h2>О семье Celleste</h2>
+      <div class="card">
+        <p>Celleste — это не просто сообщество. Это семья единомышленников, объединённых общими целями и ценностями. Мы поддерживаем друг друга, делимся знаниями и опытом, вместе растем и развиваемся.</p>
+        <p>Наша семья начиналась с малого, но с каждым днём мы становимся сильнее. Каждый участник вносит свой уникальный вклад в общее дело.</p>
+      </div>
+    </section>
+
+    <section id="principles" class="section">
+      <h2>Постулаты семьи</h2>
+      <div class="principles-grid">
+        <div class="principle-card">
+          <div class="principle-icon">🤝</div>
+          <h3>Взаимопомощь</h3>
+          <p>Мы всегда готовы прийти на помощь друг другу. Успех одного — успех всех.</p>
+        </div>
+        <div class="principle-card">
+          <div class="principle-icon">📈</div>
+          <h3>Развитие</h3>
+          <p>Постоянное обучение и совершенствование навыков — основа нашего роста.</p>
+        </div>
+        <div class="principle-card">
+          <div class="principle-icon">🎯</div>
+          <h3>Целеустремлённость</h3>
+          <p>Мы ставим амбициозные цели и достигаем их вместе, поддерживая друг друга.</p>
+        </div>
+        <div class="principle-card">
+          <div class="principle-icon">💬</div>
+          <h3>Открытость</h3>
+          <p>Честное общение и прозрачность — ключ к крепким отношениям в семье.</p>
+        </div>
+        <div class="principle-card">
+          <div class="principle-icon">🛡️</div>
+          <h3>Надёжность</h3>
+          <p>Слово каждого — закон. Мы доверяем друг другу и держим обещания.</p>
+        </div>
+        <div class="principle-card">
+          <div class="principle-icon">🎉</div>
+          <h3>Радость</h3>
+          <p>Мы умеем не только работать, но и праздновать успехи, наслаждаясь каждым моментом.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="members" class="section">
+      <h2>Состав семьи</h2>
+      <div class="members-grid" id="membersGrid">
+        <div class="member-card">
+          <div class="member-avatar">👑</div>
+          <div class="member-name">Основатель</div>
+          <div class="member-role">Глава семьи</div>
+        </div>
+      </div>
+      <p class="members-note">Полный состав отображается для верифицированных участников после входа.</p>
+    </section>
+
+    <section id="join" class="section">
+      <h2>Присоединиться к семье</h2>
+      <div class="card">
+        <p>Хочешь стать частью Celleste? Присоединяйся к нашему Discord-серверу и начни свой путь в семье!</p>
+        <a href="https://discord.gg/ВАШ_СЕРВЕР" id="discordInviteLink" target="_blank" class="btn-discord">
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath fill='%235865F2' d='M40 12c0-2.2-1.8-4-4-4H12c-2.2 0-4 1.8-4 4v24c0 2.2 1.8 4 4 4h24c2.2 0 4-1.8 4-4V12z'/%3E%3Cpath fill='%23fff' d='M32.1 17.1c-1.5-1.1-3.2-1.9-5-2.4-.2.4-.5.9-.7 1.3-1.9-.3-3.8-.3-5.7 0-.2-.4-.4-.9-.7-1.3-1.8.5-3.5 1.3-5 2.4-3.2 4.9-4.1 9.7-3.6 14.4 2.1 1.6 4.6 2.8 7.2 3.5.6-.8 1.1-1.6 1.5-2.5-.8-.3-1.6-.7-2.3-1.1.2-.1.4-.3.6-.4 4.5 2.1 9.4 2.1 13.9 0l.6.4c-.7.4-1.5.8-2.3 1.1.4.9.9 1.7 1.5 2.5 2.6-.7 5.1-1.9 7.2-3.5.6-5.3-.8-10.1-3.6-14.4zm-11.2 11.5c-1.4 0-2.5-1.3-2.5-2.8s1.1-2.8 2.5-2.8 2.5 1.3 2.5 2.8-1.1 2.8-2.5 2.8zm7.2 0c-1.4 0-2.5-1.3-2.5-2.8s1.1-2.8 2.5-2.8 2.5 1.3 2.5 2.8-1.1 2.8-2.5 2.8z'/%3E%3C/svg%3E" alt="" class="discord-icon">
+          Присоединиться в Discord
+        </a>
+      </div>
+    </section>
+
+    <section id="internal" class="section verified-only" style="display:none">
+      <h2>Внутренняя информация</h2>
+      <div class="card">
+        <p>Этот раздел доступен только верифицированным участникам семьи Celleste.</p>
+      </div>
+
+      <h3 style="margin-top:2rem;">Таблица навыков</h3>
+      <div class="skills-controls">
+        <div class="skills-filter">
+          <label>Оценка:</label>
+          <select id="skillFilter">
+            <option value="all">Все</option>
+            <option value="5">5</option>
+            <option value="4">4</option>
+            <option value="3">3</option>
+            <option value="2">2</option>
+            <option value="1">1</option>
+          </select>
+        </div>
+        <div id="skillsSummary" class="skills-summary">
+          <span class="sum-high">▲ ≥100</span>
+          <span class="sum-mid">● 60–99</span>
+          <span class="sum-low">▼ &#60;60</span>
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <table class="skills-table" id="skillsTable">
+          <thead>
+            <tr>
+              <th>Участник</th>
+              <th>Frontend</th>
+              <th>Backend</th>
+              <th>DevOps</th>
+              <th>Soft Skills</th>
+              <th>Сумма</th>
+            </tr>
+          </thead>
+          <tbody id="skillsBody">
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 Семья Celleste. Сделано с ❤️</p>
+  </footer>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
