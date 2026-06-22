@@ -15,9 +15,10 @@
 
   <nav class="navbar">
     <div class="nav-container">
-      <a href="#home" class="nav-logo">
-        <span class="logo-icon">✦</span>
+      <a href="#home" id="familyLogoLink" class="nav-logo">
+        <span class="logo-icon" id="familyLogoIcon">✦</span>
         <span class="logo-text">Celleste</span>
+        <span class="family-badge verified-only" id="familyBadge" style="display:none">Семья</span>
       </a>
       <button class="nav-toggle" id="navToggle" aria-label="Меню">
         <span></span><span></span><span></span>
@@ -27,7 +28,6 @@
         <li><a href="#postulates" class="nav-link">Постулаты</a></li>
         <li><a href="#members" class="nav-link">Состав семьи</a></li>
         <li><a href="#apply" class="nav-link">Стать частью Celleste</a></li>
-        <li><a href="#family" class="nav-link verified-only" style="display:none">Для семьи</a></li>
       </ul>
       <div class="nav-auth">
         <div id="userInfo" style="display:none">

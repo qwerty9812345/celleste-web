@@ -48,6 +48,20 @@
     });
   }
 
+  /* ===== Logo click -> family section when verified ===== */
+  var familyLogoLink = document.getElementById('familyLogoLink');
+  if (familyLogoLink) {
+    familyLogoLink.addEventListener('click', function (e) {
+      var badge = document.getElementById('familyBadge');
+      if (badge && badge.style.display !== 'none' && badge.style.display !== '') {
+        e.preventDefault();
+        window.location.hash = '#family';
+        showPage('#family');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  }
+
   document.addEventListener('click', function (e) {
     if (navList && navList.classList.contains('open')) {
       if (!e.target.closest('.navbar')) {
@@ -101,7 +115,20 @@
     var userInfo = document.getElementById('userInfo');
     var userName = document.getElementById('userName');
     var verifiedElements = document.querySelectorAll('.verified-only');
-    var familyLink = document.querySelector('.nav-link[href="#family"]');
+    var familyLogoIcon = document.getElementById('familyLogoIcon');
+    var familyBadge = document.getElementById('familyBadge');
+
+    function showVerified() {
+      verifiedElements.forEach(function (el) { el.style.display = 'block'; });
+      if (familyLogoIcon) familyLogoIcon.classList.add('verified');
+      if (familyBadge) familyBadge.style.display = 'inline-block';
+    }
+
+    function hideVerified() {
+      verifiedElements.forEach(function (el) { el.style.display = 'none'; });
+      if (familyLogoIcon) familyLogoIcon.classList.remove('verified');
+      if (familyBadge) familyBadge.style.display = 'none';
+    }
 
     if (authData.authenticated) {
       loginBtn.style.display = 'none';
@@ -109,8 +136,7 @@
       userName.textContent = authData.user.username;
 
       if (authData.verified) {
-        verifiedElements.forEach(function (el) { el.style.display = 'block'; });
-        if (familyLink) familyLink.style.display = 'block';
+        showVerified();
 
         fetch('/api/save-user', {
           method: 'POST',
@@ -120,24 +146,20 @@
         if (authData.user && authData.user.id) {
           checkFamilyMember(authData.user.id).then(function (found) {
             if (found) {
-              verifiedElements.forEach(function (el) { el.style.display = 'block'; });
-              if (familyLink) familyLink.style.display = 'block';
+              showVerified();
             } else {
-              verifiedElements.forEach(function (el) { el.style.display = 'none'; });
-              if (familyLink) familyLink.style.display = 'none';
+              hideVerified();
               showToast('У вас нет роли Celleste. Обратитесь к руководству семьи.', 'error');
             }
           });
         } else {
-          verifiedElements.forEach(function (el) { el.style.display = 'none'; });
-          if (familyLink) familyLink.style.display = 'none';
+          hideVerified();
         }
       }
     } else {
       loginBtn.style.display = 'inline-flex';
       userInfo.style.display = 'none';
-      verifiedElements.forEach(function (el) { el.style.display = 'none'; });
-      if (familyLink) familyLink.style.display = 'none';
+      hideVerified();
     }
   }
 
