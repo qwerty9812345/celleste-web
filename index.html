@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Celleste inc — Вход</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="firebaseConfig.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Inter',-apple-system,sans-serif;min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  background:#0b0d14;position:relative;overflow:hidden;
+}
+canvas#particles{
+  position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;
+}
+.glow{
+  position:fixed;width:600px;height:600px;border-radius:50%;
+  filter:blur(120px);z-index:0;pointer-events:none;
+}
+.g1{top:-200px;left:-200px;background:rgba(240,192,64,.06)}
+.g2{bottom:-300px;right:-200px;background:rgba(88,166,255,.05)}
+.card{
+  position:relative;z-index:1;width:400px;max-width:94vw;
+  background:rgba(22,27,34,.75);backdrop-filter:blur(24px);
+  border:1px solid rgba(48,54,61,.5);border-radius:24px;
+  padding:40px 36px;text-align:center;
+  box-shadow:0 32px 64px rgba(0,0,0,.5);
+  transition:border-color .4s cubic-bezier(.4,0,.2,1);
+}
+.card:hover{border-color:rgba(240,192,64,.15)}
+.logo{
+  display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:28px;
+}
+.logo-icon{
+  width:52px;height:52px;border-radius:14px;
+  background:linear-gradient(135deg,#f0c040,#d29922);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:26px;color:#0b0d14;
+  box-shadow:0 8px 24px rgba(240,192,64,.25);
+}
+.logo-text{text-align:left}
+.logo-text h1{font-size:24px;font-weight:800;color:#f0f2f5}
+.logo-text h1 span{color:#f0c040}
+.logo-text p{font-size:12px;color:#8b949e;margin-top:2px}
+h2{font-size:16px;font-weight:600;color:#e1e4e8;margin-bottom:6px}
+.sub{font-size:13px;color:#8b949e;margin-bottom:28px;line-height:1.5}
+.google-btn{
+  display:inline-flex;align-items:center;gap:12px;
+  padding:14px 32px;border-radius:12px;border:1px solid #30363d;
+  background:#21262d;color:#e1e4e8;font-size:15px;font-weight:600;
+  font-family:inherit;cursor:pointer;transition:all .25s;
+}
+.google-btn:hover{background:#30363d;border-color:#484f58;transform:translateY(-1px)}
+.google-btn img{width:20px;height:20px}
+.google-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.divider{color:#30363d;margin:24px 0;font-size:12px;display:flex;align-items:center;gap:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:#30363d}
+.email-form{text-align:left}
+.email-form input{
+  width:100%;padding:12px 16px;border-radius:10px;
+  background:rgba(13,17,23,.6);border:1px solid #30363d;
+  color:#e1e4e8;font-size:14px;font-family:inherit;
+  outline:none;transition:all .2s;margin-bottom:12px;
+}
+.email-form input:focus{border-color:#f0c040;box-shadow:0 0 0 3px rgba(240,192,64,.1)}
+.email-form button{
+  width:100%;padding:12px;border-radius:10px;border:none;
+  background:linear-gradient(135deg,#f0c040,#d29922);
+  color:#0b0d14;font-size:15px;font-weight:700;font-family:inherit;
+  cursor:pointer;transition:all .25s;
+}
+.email-form button:hover{filter:brightness(1.1)}
+.error{
+  background:rgba(218,54,51,.12);border:1px solid rgba(218,54,51,.3);
+  color:#f85149;font-size:13px;padding:10px;border-radius:8px;margin-bottom:16px;display:none;
+}
+.loader{display:none;margin:20px auto;width:32px;height:32px;border:3px solid #30363d;border-top-color:#f0c040;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<canvas id="particles"></canvas>
+<div class="glow g1"></div><div class="glow g2"></div>
+<div class="card" id="card">
+  <div class="logo">
+    <div class="logo-icon">C</div>
+    <div class="logo-text"><h1>Celleste <span>inc</span></h1><p>Панель навыков персонала</p></div>
+  </div>
+  <div class="error" id="error"></div>
+  <div id="viewDefault">
+    <h2>Добро пожаловать</h2>
+    <p class="sub">Войди через Google, чтобы продолжить</p>
+    <button class="google-btn" id="googleBtn" onclick="loginGoogle()">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath fill='%23EA4335' d='M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z'/%3E%3Cpath fill='%234285F4' d='M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z'/%3E%3Cpath fill='%23FBBC05' d='M10.53 28.59A14.5 14.5 0 0 1 9.5 24c0-1.59.28-3.14.76-4.59l-7.98-6.19A23.99 23.99 0 0 0 0 24c0 3.77.88 7.35 2.56 10.56l7.97-5.97z'/%3E%3Cpath fill='%2334A853' d='M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 5.97C6.51 42.62 14.62 48 24 48z'/%3E%3C/svg%3E" alt="G">
+      Войти через Google
+    </button>
+    <div class="divider">или</div>
+    <div class="email-form">
+      <input type="email" id="emailInput" placeholder="email@domain.com" autocomplete="email">
+      <button onclick="loginEmail()">Войти по Email</button>
+    </div>
+  </div>
+  <div class="loader" id="loader"></div>
+</div>
+<script>
+const ERR = document.getElementById('error');
+function showErr(msg){ERR.textContent=msg;ERR.style.display='block'}
+function hideErr(){ERR.style.display='none'}
+
+function setLoading(on){
+  document.getElementById('viewDefault').style.display=on?'none':'block';
+  document.getElementById('loader').style.display=on?'block':'none';
+}
+
+function loginGoogle(){
+  hideErr();setLoading(true);
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider).then(r=>onLogin(r.user)).catch(e=>{setLoading(false);showErr(e.message)});
+}
+
+function loginEmail(){
+  hideErr();
+  const email = document.getElementById('emailInput').value.trim();
+  if(!email.includes('@')){showErr('Введи корректный email');return}
+  setLoading(true);
+  auth.sendSignInLinkToEmail(email, {
+    url: location.href.split('?')[0],
+    handleCodeInApp: true
+  }).then(()=>{
+    setLoading(false);
+    document.getElementById('card').innerHTML=`
+      <div class="logo"><div class="logo-icon">C</div><div class="logo-text"><h1>Celleste <span>inc</span></h1></div></div>
+      <h2>✉️ Проверь почту</h2>
+      <p class="sub">Ссылка для входа отправлена на <b>${email}</b></p>
+    `;
+  }).catch(e=>{setLoading(false);showErr(e.message)});
+}
+
+// обработка ссылки из письма
+if(auth.isSignInWithEmailLink(location.href)){
+  const email = window.localStorage.getItem('emailForSignIn');
+  if(email){
+    auth.signInWithEmailLink(email, location.href).then(r=>onLogin(r.user)).catch(e=>showErr(e.message));
+  }
+}
+window.localStorage.removeItem('emailForSignIn');
+
+async function onLogin(user){
+  if(!user) return;
+  const token = await user.getIdToken();
+  // проверяем админа в Firestore
+  const snap = await db.collection('settings').doc('meta').get();
+  let adminEmail = snap.exists ? snap.data().adminEmail : null;
+  if(!adminEmail){
+    // первый вход — этот пользователь становится админом
+    await db.collection('settings').doc('meta').set({adminEmail: user.email});
+    adminEmail = user.email;
+  }
+  const modSnap = await db.collection('moderators').where('email','==',user.email).get();
+  let role = 'viewer';
+  if(user.email === adminEmail) role = 'admin';
+  else if(!modSnap.empty) role = modSnap.docs[0].data().role;
+
+  sessionStorage.setItem('celleste_user', JSON.stringify({
+    uid: user.uid,
+    email: user.email,
+    name: user.displayName || user.email,
+    photo: user.photoURL || '',
+    role: role
+  }));
+  location.href = 'app.html';
+}
+
+// particles
+(function(){
+  const c=document.getElementById('particles'),ctx=c.getContext('2d');
+  c.width=window.innerWidth;c.height=window.innerHeight;
+  const pts=[];
+  for(let i=0;i<60;i++){pts.push({x:Math.random()*c.width,y:Math.random()*c.height,dx:(Math.random()-.5)*.3,dy:(Math.random()-.5)*.3,r:1+Math.random()*2})}
+  function draw(){ctx.clearRect(0,0,c.width,c.height);
+    for(const p of pts){
+      p.x+=p.dx;p.y+=p.dy;
+      if(p.x<0||p.x>c.width)p.dx*=-1;
+      if(p.y<0||p.y>c.height)p.dy*=-1;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(240,192,64,.15)';ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+  window.addEventListener('resize',()=>{c.width=window.innerWidth;c.height=window.innerHeight});
+})();
+</script>
+</body>
+</html>
