@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Celleste — Семья</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="#home" class="nav-logo">
+        <span class="logo-icon">✦</span>
+        <span class="logo-text">Celleste</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="nav-link active">Главная</a></li>
+        <li><a href="#postulates" class="nav-link">Постулаты</a></li>
+        <li><a href="#members" class="nav-link">Состав семьи</a></li>
+        <li><a href="#apply" class="nav-link">Стать частью Celleste</a></li>
+        <li><a href="#family" class="nav-link verified-only" style="display:none">Для семьи</a></li>
+      </ul>
+      <div class="nav-auth">
+        <div id="userInfo" style="display:none">
+          <span id="userName"></span>
+          <button id="logoutBtn" class="btn-sm">Выйти</button>
+        </div>
+        <button id="loginBtn" class="btn btn-primary nav-login-btn">Войти через Discord</button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ===== HOME ===== -->
+    <section class="page active" id="page-home">
+      <div class="hero">
+        <canvas id="particlesCanvas"></canvas>
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <div class="hero-badge">СЕМЕЙНАЯ ОРГАНИЗАЦИЯ</div>
+          <h1 class="hero-title">Семья <span class="text-gold">Celleste</span></h1>
+          <p class="hero-subtitle">Единство. Сила. Развитие. — Мы строим будущее вместе, опираясь на вековые традиции и современное видение.</p>
+          <div class="hero-actions">
+            <a href="#postulates" class="btn btn-primary">Постулаты <i class="fas fa-scroll"></i></a>
+            <a href="#apply" class="btn btn-outline">Стать частью Celleste <i class="fas fa-handshake"></i></a>
+          </div>
+        </div>
+        <div class="hero-scroll">
+          <span>Листайте вниз</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== POSTULATES ===== -->
+    <section class="page" id="page-postulates">
+      <div class="section postulates-section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag"><i class="fas fa-star"></i></span>
+            <h2 class="section-title">Постулаты семьи <span class="text-gold">Celleste</span></h2>
+            <div class="section-divider"></div>
+            <p class="section-desc">Влияние в тени. Контроль в действиях.</p>
+          </div>
+          <div class="postulates-grid">
+            <div class="postulate-card">
+              <div class="postulate-num">I</div>
+              <div class="postulate-content">
+                <h3 class="postulate-title"><i class="fas fa-scale-balanced"></i> ЛИЦО СЕМЬИ</h3>
+                <p class="postulate-desc">Семья — это не имя. Это репутация, за которую отвечают все. Ошибка одного — ответственность каждого.</p>
+              </div>
+            </div>
+            <div class="postulate-card">
+              <div class="postulate-num">II</div>
+              <div class="postulate-content">
+                <h3 class="postulate-title"><i class="fas fa-lock"></i> ВЕРНОСТЬ</h3>
+                <p class="postulate-desc">Верность не обсуждается. — Информация не покидает круг — Решения не выносятся наружу — Свои не предаются. Нарушивший это — больше не часть семьи.</p>
+              </div>
+            </div>
+            <div class="postulate-card">
+              <div class="postulate-num">III</div>
+              <div class="postulate-content">
+                <h3 class="postulate-title"><i class="fas fa-handshake"></i> УВАЖЕНИЕ</h3>
+                <p class="postulate-desc">Уважение — обязательное условие. — Внутри семьи нет места унижению — Снаружи нет места бессмысленной агрессии. Контроль важнее эмоций.</p>
+              </div>
+            </div>
+            <div class="postulate-card">
+              <div class="postulate-num">IV</div>
+              <div class="postulate-content">
+                <h3 class="postulate-title"><i class="fas fa-eye"></i> ВЛАСТЬ</h3>
+                <p class="postulate-desc">Власть не демонстрируют. — Её не доказывают — Её не объясняют — Её реализуют. Те, кто говорит — не управляют.</p>
+              </div>
+            </div>
+            <div class="postulate-card wide">
+              <div class="postulate-num">V</div>
+              <div class="postulate-content">
+                <h3 class="postulate-title"><i class="fas fa-landmark"></i> ПОРЯДОК</h3>
+                <p class="postulate-desc">Все внутри — часть одного механизма. — Каждый голос учитывается — Каждый несёт ответственность — Последнее решение за теми, кто отвечает за последствия. Решение — это не мнение. Это итог.</p>
+              </div>
+            </div>
+            <div class="postulate-card">
+              <div class="postulate-num">VI</div>
+              <div class="postulate-content">
+                <h3 class="postulate-title"><i class="fas fa-masks-theater"></i> ПОВЕДЕНИЕ</h3>
+                <p class="postulate-desc">Эмоции — слабость, если они вне контроля. — В конфликте сохраняется холод — В шутке сохраняется грань — В любой ситуации сохраняется лицо. Потерял контроль — потерял позицию.</p>
+              </div>
+            </div>
+            <div class="postulate-card">
+              <div class="postulate-num">VII</div>
+              <div class="postulate-content">
+                <h3 class="postulate-title"><i class="fas fa-ban"></i> ЗАПРЕТЫ</h3>
+                <p class="postulate-desc">Недопустимо: ✖ Неуважение к своим ✖ Слив информации ✖ Действия против интересов семьи. Нарушение — это выход. Без обсуждений.</p>
+              </div>
+            </div>
+            <div class="postulate-card">
+              <div class="postulate-num">VIII</div>
+              <div class="postulate-content">
+                <h3 class="postulate-title"><i class="fas fa-candle-holder"></i> СИЛА</h3>
+                <p class="postulate-desc">Сила не нуждается в признании. Она проявляется в решениях, действиях и последствиях. Кто требует внимания — не контролирует его.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MEMBERS ===== -->
+    <section class="page" id="page-members">
+      <div class="section members-section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag"><i class="fas fa-users"></i></span>
+            <h2 class="section-title">Состав семьи <span class="text-gold">Celleste</span></h2>
+            <div class="section-divider"></div>
+            <p class="section-desc">Информация будет добавлена позже</p>
+          </div>
+          <div class="empty-state-section">
+            <i class="fas fa-users"></i>
+            <p>Состав семьи скоро будет опубликован</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== APPLY ===== -->
+    <section class="page" id="page-apply">
+      <div class="section apply-section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag"><i class="fas fa-handshake"></i></span>
+            <h2 class="section-title">Стать частью <span class="text-gold">Celleste</span></h2>
+            <div class="section-divider"></div>
+            <p class="section-desc">Заполните форму, чтобы стать частью семьи Celleste. Мы рассматриваем каждую заявку индивидуально.</p>
+          </div>
+          <div class="form-wrapper">
+            <iframe src="https://script.google.com/macros/s/AKfycbyr1qt8gxJN4LIDvqkYSE3q-Cjp8KBPBsZCnkNgvKma3ZZQVahoza7rmnsWfvuQUxq1iQ/exec"
+                    title="Заявка в Celleste"
+                    class="apply-iframe"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-read; clipboard-write; encrypted-media; fullscreen; geolocation; gyroscope; magnetometer; payment; picture-in-picture; web-share">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FAMILY (verified only) ===== -->
+    <section class="page verified-only" id="page-family" style="display:none">
+      <div class="section family-section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag"><i class="fas fa-star"></i></span>
+            <h2 class="section-title">Для семьи <span class="text-gold">Celleste</span></h2>
+            <div class="section-divider"></div>
+            <p class="section-desc">Таблица навыков участников семьи</p>
+          </div>
+
+          <div id="skillsError" class="skills-error" style="display:none"></div>
+          <div id="skillsLoading" class="skills-loading">Загрузка...</div>
+
+          <div id="skillsStats" class="stats-grid"></div>
+
+          <div class="skills-controls">
+            <div class="cat-filters">
+              <button class="cat-filter-btn active" data-cat="all">Все</button>
+              <button class="cat-filter-btn" data-cat="high">Высокий</button>
+              <button class="cat-filter-btn" data-cat="mid">Средний</button>
+              <button class="cat-filter-btn" data-cat="low">Низкий</button>
+            </div>
+            <div class="skills-toolbar">
+              <input type="text" id="skillsSearch" class="search-input" placeholder="Поиск по имени...">
+              <select id="ratingFilter" class="filter-select">
+                <option value="0">Все оценки</option>
+                <option value="5">5</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="skills-actions">
+            <button id="addEmployeeBtn" class="btn btn-primary btn-sm-skills"><i class="fas fa-plus"></i> Добавить участника</button>
+            <button id="csvImportBtn" class="btn btn-outline btn-sm-skills"><i class="fas fa-file-import"></i> Импорт CSV</button>
+          </div>
+
+          <div id="skillsTableWrapper" class="table-wrapper"></div>
+
+          <!-- Add Modal -->
+          <div id="addModal" class="modal" style="display:none">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3>Добавить участника</h3>
+                <span class="modal-close">&times;</span>
+              </div>
+              <form id="addForm"></form>
+            </div>
+          </div>
+
+          <!-- CSV Modal -->
+          <div id="csvModal" class="modal" style="display:none">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3>Импорт CSV</h3>
+                <span class="modal-close">&times;</span>
+              </div>
+              <p class="modal-desc">Первая строка — заголовки (name, ключ_навыка). Каждая следующая — участник. <a href="#" id="csvExampleLink">Пример</a></p>
+              <textarea id="csvInput" class="csv-input" rows="8" placeholder="name, liderstvo, komanda, ...&#10;Иван, 4, 5, 3, ..."></textarea>
+              <div id="csvPreview"></div>
+              <div class="form-actions">
+                <button id="csvImportBtnModal" class="btn btn-primary" style="display:none">Импортировать</button>
+                <button class="btn btn-outline modal-close-btn">Отмена</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="footer-logo">✦ Celleste</span>
+          <p>Семейная организация, основанная на единстве, чести и взаимном уважении.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Навигация</h4>
+          <ul>
+            <li><a href="#home">Главная</a></li>
+            <li><a href="#postulates">Постулаты</a></li>
+            <li><a href="#members">Состав семьи</a></li>
+            <li><a href="#apply">Стать частью Celleste</a></li>
+          </ul>
+        </div>
+        <div class="footer-social">
+          <h4>Мы в сети</h4>
+          <div class="social-icons">
+            <a href="https://discord.gg/wwBudd2e7d" target="_blank" class="social-link" title="Discord"><i class="fab fa-discord"></i></a>
+            <a href="mailto:cellestefamily@gmail.com" class="social-link" title="Email"><i class="fas fa-envelope"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Celleste Family. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/skills.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
