@@ -48,19 +48,49 @@
     });
   }
 
-  /* ===== Logo click -> family section when verified ===== */
+  /* ===== Logo click -> family overlay when verified ===== */
   var familyLogoLink = document.getElementById('familyLogoLink');
+  var familyOverlay = document.getElementById('familyOverlay');
+  var familyOverlayClose = document.getElementById('familyOverlayClose');
+  var familyOverlayBackdrop = document.getElementById('familyOverlayBackdrop');
+
+  function openFamilyOverlay() {
+    if (familyOverlay) {
+      familyOverlay.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeFamilyOverlay() {
+    if (familyOverlay) {
+      familyOverlay.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+  }
+
   if (familyLogoLink) {
     familyLogoLink.addEventListener('click', function (e) {
       var badge = document.getElementById('familyBadge');
       if (badge && badge.style.display !== 'none' && badge.style.display !== '') {
         e.preventDefault();
-        window.location.hash = '#family';
-        showPage('#family');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        openFamilyOverlay();
       }
     });
   }
+
+  if (familyOverlayClose) {
+    familyOverlayClose.addEventListener('click', closeFamilyOverlay);
+  }
+
+  if (familyOverlayBackdrop) {
+    familyOverlayBackdrop.addEventListener('click', closeFamilyOverlay);
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && familyOverlay && familyOverlay.style.display === 'flex') {
+      closeFamilyOverlay();
+    }
+  });
 
   document.addEventListener('click', function (e) {
     if (navList && navList.classList.contains('open')) {
@@ -251,7 +281,7 @@
         var pulseAlpha = p.alpha + Math.sin(p.pulse) * 0.1;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(212, 168, 83, ' + Math.max(0, pulseAlpha) + ')';
+        ctx.fillStyle = 'rgba(230, 190, 106, ' + Math.max(0, pulseAlpha) + ')';
         ctx.fill();
 
         for (var j = i + 1; j < particles.length; j++) {
@@ -265,7 +295,7 @@
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = 'rgba(212, 168, 83, ' + alpha + ')';
+            ctx.strokeStyle = 'rgba(230, 190, 106, ' + alpha + ')';
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -280,7 +310,7 @@
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(mouse.x, mouse.y);
-          ctx.strokeStyle = 'rgba(212, 168, 83, ' + mAlpha + ')';
+            ctx.strokeStyle = 'rgba(230, 190, 106, ' + mAlpha + ')';
           ctx.lineWidth = 0.5;
           ctx.stroke();
         }

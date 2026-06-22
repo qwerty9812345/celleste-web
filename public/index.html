@@ -175,17 +175,17 @@
       </div>
     </section>
 
-    <!-- ===== FAMILY (verified only) ===== -->
-    <section class="page verified-only" id="page-family" style="display:none">
-      <div class="section family-section">
-        <div class="container">
-          <div class="section-header">
-            <span class="section-tag"><i class="fas fa-star"></i></span>
-            <h2 class="section-title">Для семьи <span class="text-gold">Celleste</span></h2>
-            <div class="section-divider"></div>
-            <p class="section-desc">Ресурсы и инструменты для участников семьи</p>
-          </div>
-
+    <!-- ===== FAMILY OVERLAY (verified only) ===== -->
+    <div class="family-overlay verified-only" id="familyOverlay" style="display:none">
+      <div class="family-overlay-backdrop" id="familyOverlayBackdrop"></div>
+      <div class="family-overlay-panel">
+        <div class="family-overlay-header">
+          <h2 class="family-overlay-title">✦ Для семьи Celleste</h2>
+          <button class="family-overlay-close" id="familyOverlayClose" aria-label="Закрыть">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="family-overlay-body">
           <div class="family-cards">
             <div class="family-card">
               <div class="family-card-icon"><i class="fas fa-table"></i></div>
@@ -204,7 +204,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </div>
 
   </main>
 
