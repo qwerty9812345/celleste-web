@@ -933,12 +933,29 @@ body {
   width: 94%;
   max-width: 680px;
   max-height: 85vh;
-  background: #131723;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #111620;
+  border: 1px solid rgba(202, 146, 202, 0.08);
   border-radius: 24px;
   overflow: hidden;
   animation: overlaySlideUp 0.35s ease;
   box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6);
+}
+
+.family-overlay-panel::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: -1px; right: -1px; bottom: -1px;
+  border-radius: 25px;
+  background: linear-gradient(135deg, rgba(202,146,202,0.04), transparent, rgba(124,140,255,0.02), transparent);
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+  animation: borderGlow 8s ease-in-out infinite;
+}
+
+@keyframes borderGlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
 }
 
 .family-overlay-header {
@@ -946,24 +963,28 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 24px 32px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(202, 146, 202, 0.04);
+  background: rgba(202, 146, 202, 0.02);
 }
 
 .family-overlay-title {
   font-size: 22px;
   font-weight: 800;
-  color: #f0f0f4;
+  color: #eef0f8;
   letter-spacing: 0.5px;
+  background: linear-gradient(135deg, #eef0f8, #ca92ca, #b07cb0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .family-overlay-close {
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
-  color: #b0b0c0;
+  border: 1px solid rgba(202, 146, 202, 0.06);
+  background: rgba(202, 146, 202, 0.03);
+  color: rgba(202, 146, 202, 0.4);
   font-size: 16px;
   cursor: pointer;
   display: flex;
@@ -973,9 +994,9 @@ body {
 }
 
 .family-overlay-close:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #f0f0f4;
-  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(202, 146, 202, 0.08);
+  color: #ca92ca;
+  border-color: rgba(202, 146, 202, 0.12);
 }
 
 .family-overlay-body {
@@ -986,6 +1007,41 @@ body {
 
 .family-overlay-body .family-cards {
   max-width: 100%;
+}
+
+.family-overlay-body .family-card {
+  background: rgba(202, 146, 202, 0.02);
+  border-color: rgba(202, 146, 202, 0.06);
+}
+
+.family-overlay-body .family-card::before {
+  background: linear-gradient(90deg, transparent, rgba(202, 146, 202, 0.15), transparent);
+}
+
+.family-overlay-body .family-card:hover {
+  border-color: rgba(202, 146, 202, 0.12);
+}
+
+.family-overlay-body .family-card-icon {
+  color: #ca92ca;
+}
+
+.family-overlay-body .family-card h3 {
+  color: #eef0f8;
+}
+
+.family-overlay-body .family-card p {
+  color: rgba(176, 184, 221, 0.4);
+}
+
+.family-overlay-body .btn-primary {
+  background: linear-gradient(135deg, #ca92ca, #b07cb0);
+  color: #fff;
+  box-shadow: 0 4px 24px rgba(202, 146, 202, 0.15);
+}
+
+.family-overlay-body .btn-primary:hover {
+  box-shadow: 0 8px 32px rgba(202, 146, 202, 0.25);
 }
 
 @keyframes overlayFadeIn {

@@ -152,6 +152,10 @@
       verifiedElements.forEach(function (el) { el.style.display = 'block'; });
       if (familyLogoIcon) familyLogoIcon.classList.add('verified');
       if (familyBadge) familyBadge.style.display = 'inline-block';
+      if (!sessionStorage.getItem('family_overlay_shown')) {
+        sessionStorage.setItem('family_overlay_shown', '1');
+        openFamilyOverlay();
+      }
     }
 
     function hideVerified() {
