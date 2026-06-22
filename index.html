@@ -90,7 +90,7 @@ h2{font-size:16px;font-weight:600;color:#e1e4e8;margin-bottom:6px}
 <div class="glow g1"></div><div class="glow g2"></div>
 <div class="card" id="card">
   <div class="logo">
-    <div class="logo-icon">C</div>
+    <img src="https://i.postimg.cc/VkbLk8fZ/banner.png" style="height:48px;border-radius:10px" alt="Celleste">
     <div class="logo-text"><h1>Celleste <span>inc</span></h1><p>Панель навыков персонала</p></div>
   </div>
   <div class="error" id="error"></div>
@@ -136,7 +136,7 @@ function loginEmail(){
   }).then(()=>{
     setLoading(false);
     document.getElementById('card').innerHTML=`
-      <div class="logo"><div class="logo-icon">C</div><div class="logo-text"><h1>Celleste <span>inc</span></h1></div></div>
+      <div class="logo"><img src="https://i.postimg.cc/VkbLk8fZ/banner.png" style="height:48px;border-radius:10px" alt="Celleste"><div class="logo-text"><h1>Celleste <span>inc</span></h1></div></div>
       <h2>✉️ Проверь почту</h2>
       <p class="sub">Ссылка для входа отправлена на <b>${email}</b></p>
     `;
