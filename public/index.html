@@ -183,66 +183,23 @@
             <span class="section-tag"><i class="fas fa-star"></i></span>
             <h2 class="section-title">Для семьи <span class="text-gold">Celleste</span></h2>
             <div class="section-divider"></div>
-            <p class="section-desc">Таблица навыков участников семьи</p>
+            <p class="section-desc">Ресурсы и инструменты для участников семьи</p>
           </div>
 
-          <div id="skillsError" class="skills-error" style="display:none"></div>
-          <div id="skillsLoading" class="skills-loading">Загрузка...</div>
-
-          <div id="skillsStats" class="stats-grid"></div>
-
-          <div class="skills-controls">
-            <div class="cat-filters">
-              <button class="cat-filter-btn active" data-cat="all">Все</button>
-              <button class="cat-filter-btn" data-cat="high">Высокий</button>
-              <button class="cat-filter-btn" data-cat="mid">Средний</button>
-              <button class="cat-filter-btn" data-cat="low">Низкий</button>
+          <div class="family-cards">
+            <div class="family-card">
+              <div class="family-card-icon"><i class="fas fa-table"></i></div>
+              <h3>Таблица навыков</h3>
+              <p>Оценка и развитие навыков участников семьи. Заполняйте, отслеживайте прогресс.</p>
+              <a href="https://docs.google.com/spreadsheets/d/1Yx7Bt2lJqCuL8jYEYlLcrNBMInQTSNjSM62Sxo3r-oI/edit?usp=sharing" target="_blank" class="btn btn-primary family-card-btn">
+                Открыть таблицу <i class="fas fa-external-link-alt"></i>
+              </a>
             </div>
-            <div class="skills-toolbar">
-              <input type="text" id="skillsSearch" class="search-input" placeholder="Поиск по имени...">
-              <select id="ratingFilter" class="filter-select">
-                <option value="0">Все оценки</option>
-                <option value="5">5</option>
-                <option value="4">4</option>
-                <option value="3">3</option>
-                <option value="2">2</option>
-                <option value="1">1</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="skills-actions">
-            <button id="addEmployeeBtn" class="btn btn-primary btn-sm-skills"><i class="fas fa-plus"></i> Добавить участника</button>
-            <button id="csvImportBtn" class="btn btn-outline btn-sm-skills"><i class="fas fa-file-import"></i> Импорт CSV</button>
-          </div>
-
-          <div id="skillsTableWrapper" class="table-wrapper"></div>
-
-          <!-- Add Modal -->
-          <div id="addModal" class="modal" style="display:none">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h3>Добавить участника</h3>
-                <span class="modal-close">&times;</span>
-              </div>
-              <form id="addForm"></form>
-            </div>
-          </div>
-
-          <!-- CSV Modal -->
-          <div id="csvModal" class="modal" style="display:none">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h3>Импорт CSV</h3>
-                <span class="modal-close">&times;</span>
-              </div>
-              <p class="modal-desc">Первая строка — заголовки (name, ключ_навыка). Каждая следующая — участник. <a href="#" id="csvExampleLink">Пример</a></p>
-              <textarea id="csvInput" class="csv-input" rows="8" placeholder="name, liderstvo, komanda, ...&#10;Иван, 4, 5, 3, ..."></textarea>
-              <div id="csvPreview"></div>
-              <div class="form-actions">
-                <button id="csvImportBtnModal" class="btn btn-primary" style="display:none">Импортировать</button>
-                <button class="btn btn-outline modal-close-btn">Отмена</button>
-              </div>
+            <div class="family-card">
+              <div class="family-card-icon"><i class="fas fa-users"></i></div>
+              <h3>Состав семьи</h3>
+              <p>Скоро будет добавлен полный список участников семьи Celleste.</p>
+              <span class="btn btn-outline family-card-btn disabled-btn">Скоро</span>
             </div>
           </div>
         </div>
@@ -285,7 +242,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script src="/js/firebase-config.js"></script>
-  <script src="/js/skills.js"></script>
   <script src="/js/app.js"></script>
 </body>
 </html>

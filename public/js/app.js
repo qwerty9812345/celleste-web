@@ -111,21 +111,17 @@
       if (authData.verified) {
         verifiedElements.forEach(function (el) { el.style.display = 'block'; });
         if (familyLink) familyLink.style.display = 'block';
-        SkillsTable.init({ canEdit: true });
 
-        // Save user to Firebase on first auth
         fetch('/api/save-user', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' }
         }).catch(function () {});
       } else {
-        // Check if user was previously saved in Firestore
         if (authData.user && authData.user.id) {
           checkFamilyMember(authData.user.id).then(function (found) {
             if (found) {
               verifiedElements.forEach(function (el) { el.style.display = 'block'; });
               if (familyLink) familyLink.style.display = 'block';
-              SkillsTable.init({ canEdit: false });
             } else {
               verifiedElements.forEach(function (el) { el.style.display = 'none'; });
               if (familyLink) familyLink.style.display = 'none';
