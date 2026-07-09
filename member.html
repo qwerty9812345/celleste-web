@@ -5315,22 +5315,12 @@
               <div class="gramm-feed-header">
                 <span class="gramm-feed-logo">Cellestegramm</span>
                 <div style="display:flex;gap:12px">
-                  <span class="gramm-feed-action" id="grammFeedNotifBtn"><i class="far fa-heart"></i></span>
                   <span class="gramm-feed-action" id="grammFeedDmBtn"><i class="far fa-paper-plane"></i></span>
                 </div>
               </div>
               <div class="gramm-stories" id="grammStories"></div>
               <div class="gramm-feed" id="grammGrid"></div>
               <div id="grammSentinel" class="gramm-sentinel"></div>
-            </div>
-
-            <!-- Explore View -->
-            <div class="gramm-view" id="grammExploreView" style="display:none">
-              <div style="padding:4px 0 8px;font-size:16px;font-weight:700;color:rgba(255,255,255,0.85)">Поиск</div>
-              <div class="gramm-explore-search">
-                <input type="text" id="grammSearchInput" class="gramm-input" placeholder="Поиск" style="width:100%;padding:10px 14px;border-radius:10px;font-size:14px;background:rgba(255,255,255,0.06);border:none;color:#fff">
-              </div>
-              <div class="gramm-feed gramm-photo-grid" id="grammExploreGrid"></div>
             </div>
 
             <!-- Create View (new post) -->
@@ -5386,12 +5376,6 @@
                   <span class="gramm-reels-caption" id="grammReelsCaption"></span>
                 </div>
               </div>
-            </div>
-
-            <!-- Notifications View -->
-            <div class="gramm-view" id="grammNotifsView" style="display:none">
-              <div style="padding:8px 0 12px;font-size:16px;font-weight:700;color:rgba(255,255,255,0.85)">Уведомления</div>
-              <div id="grammNotifsList"></div>
             </div>
 
             <!-- User Profile View -->
@@ -5465,10 +5449,8 @@
           <!-- Bottom Navigation (Instagram-style) -->
           <div class="gramm-bottom-nav">
             <button class="gramm-nav-btn active" data-tab="feed" title="Главная"><i class="fas fa-home"></i></button>
-            <button class="gramm-nav-btn" data-tab="explore" title="Поиск"><i class="fas fa-search"></i></button>
             <button class="gramm-nav-btn" data-tab="reels" title="Reels"><i class="fas fa-film"></i></button>
             <button class="gramm-nav-btn gramm-nav-create" id="grammNavCreate" title="Создать"><i class="fas fa-plus-square"></i></button>
-            <button class="gramm-nav-btn" data-tab="notifs" title="Уведомления"><i class="far fa-heart"></i><span id="notifDot" style="display:none;position:absolute;top:8px;right:18px;width:8px;height:8px;border-radius:50%;background:#ef4444"></span></button>
             <button class="gramm-nav-btn" data-tab="profile" title="Профиль"><i class="far fa-user-circle"></i></button>
           </div>
 
