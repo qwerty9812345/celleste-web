@@ -1,14 +1,13 @@
 {
   "version": 2,
   "builds": [
-    { "src": "api/index.js", "use": "@vercel/node" },
-    { "src": "public/**", "use": "@vercel/static" },
-    { "src": "member.html", "use": "@vercel/static" }
+    {
+      "src": "api/index.js",
+      "use": "@vercel/node",
+      "config": { "includeFiles": ["public/**", "member.html"] }
+    }
   ],
   "routes": [
-    { "src": "/member", "dest": "/member.html" },
-    { "src": "/js/(.*)", "dest": "/public/js/$1" },
-    { "src": "/css/(.*)", "dest": "/public/css/$1" },
     { "src": "/(.*)", "dest": "/api/index.js" }
   ]
 }

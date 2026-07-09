@@ -1,10 +1,21 @@
 const express = require('express');
 const session = require('cookie-session');
 const path = require('path');
+const fs = require('fs');
 const dotenv = require('dotenv');
 dotenv.config();
 
 const app = express();
+
+// Determine root directory (works both locally and in Vercel Lambda)
+let rootDir = __dirname;
+for (let i = 0; i < 3; i++) {
+  if (fs.existsSync(path.join(rootDir, 'member.html'))) break;
+  rootDir = path.dirname(rootDir);
+}
+if (!fs.existsSync(path.join(rootDir, 'member.html'))) {
+  rootDir = process.cwd();
+}
 const BASE_URL = process.env.BASE_URL || 'https://family-site-umber.vercel.app';
 const isProduction = BASE_URL.startsWith('https');
 
@@ -20,7 +31,7 @@ app.use(session({
 }));
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '..', 'public')));
+app.use(express.static(path.join(rootDir, 'public')));
 
 const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
 const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
@@ -111,7 +122,7 @@ app.get('/auth/logout', (req, res) => {
 
 app.get('/member', (req, res) => {
   if (!req.session.user) return res.redirect('/');
-  res.sendFile(path.join(__dirname, '..', 'member.html'));
+  res.sendFile(path.join(rootDir, 'member.html'));
 });
 
 app.get('/api/me', (req, res) => {
