@@ -41,16 +41,3 @@ async function saveFamilyMember(discordId, username) {
     return false;
   }
 }
-
-async function checkFamilyMember(discordId) {
-  try {
-    const snap = await db.collection('family_members')
-      .where('discordId', '==', discordId)
-      .limit(1)
-      .get();
-    return !snap.empty;
-  } catch (e) {
-    console.warn('[Celleste] Firestore check error:', e.message);
-    return false;
-  }
-}

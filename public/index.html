@@ -3,22 +3,1955 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Celleste — Семья</title>
+  <title>Семья Celleste</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
+  <style>
+    /* ===== Global dynamic background ===== */
+    .global-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      background: #05060a;
+    }
+    .global-bg-radials {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 15% 50%, rgba(139,92,246,0.1) 0%, transparent 60%),
+        radial-gradient(ellipse at 85% 50%, rgba(139,92,246,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse at 50% 20%, rgba(255,255,255,0.02) 0%, transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(139,92,246,0.03) 0%, transparent 30%);
+      animation: radialsPulse 10s ease-in-out infinite alternate;
+    }
+    @keyframes radialsPulse {
+      0% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.03); }
+      100% { opacity: 0.8; transform: scale(0.97); }
+    }
+    .global-bg-grid {
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.008) 40px, rgba(255,255,255,0.008) 41px),
+        repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,255,255,0.008) 40px, rgba(255,255,255,0.008) 41px);
+      animation: gridShift 20s linear infinite;
+    }
+    @keyframes gridShift {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(20px, 10px); }
+      100% { transform: translate(0, 0); }
+    }
+    .global-bg-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.5;
+      animation: orbDrift 18s ease-in-out infinite alternate;
+    }
+    .global-bg-orb.orb-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(139,92,246,0.12), transparent);
+      top: 10%; left: 20%;
+      animation-duration: 20s;
+    }
+    .global-bg-orb.orb-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(139,92,246,0.08), transparent);
+      bottom: 10%; right: 15%;
+      animation-duration: 25s;
+      animation-delay: -8s;
+    }
+    .global-bg-orb.orb-3 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(255,255,255,0.03), transparent);
+      top: 50%; left: 60%;
+      animation-duration: 22s;
+      animation-delay: -14s;
+    }
+    .global-bg-orb.orb-4 {
+      width: 280px; height: 280px;
+      background: radial-gradient(circle, rgba(139,92,246,0.06), transparent);
+      top: 30%; left: -5%;
+      animation-duration: 18s;
+      animation-delay: -4s;
+    }
+    @keyframes orbDrift {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(40px, -30px) scale(1.1); }
+      100% { transform: translate(-30px, 40px) scale(0.95); }
+    }
+
+    /* ===== Section backgrounds override for global bg ===== */
+    .about-section,
+    .postulates-section,
+    .apply-section,
+    .tetris-section,
+    .contacts-section,
+    .members-section,
+    .location-section {
+      background: transparent !important;
+    }
+
+    .postulates-section::before { display: none; }
+    .about-card {
+      animation: fadeUp 0.6s ease both;
+    }
+    .about-card:nth-child(1) { animation-delay: 0.1s; }
+    .about-card:nth-child(2) { animation-delay: 0.25s; }
+    .about-card:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+    .about-card {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      text-align: left;
+      padding: 28px 24px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.4s;
+      position: relative;
+    }
+    .about-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 3px; height: 0;
+      background: linear-gradient(180deg, #8b5cf6, transparent);
+      transition: height 0.4s ease;
+    }
+    .about-card:hover::before { height: 100%; }
+    .about-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(139,92,246,0.04), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+    .about-card:hover::after { opacity: 1; }
+    .about-card:hover {
+      border-color: rgba(139,92,246,0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .about-card .about-icon {
+      flex-shrink: 0;
+      width: 44px;
+      font-size: 26px;
+      color: #8b5cf6;
+      text-align: center;
+      padding-top: 2px;
+      transition: transform 0.3s;
+    }
+    .about-card:hover .about-icon { transform: scale(1.15); }
+    .about-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .about-card p {
+      font-size: 14px;
+      color: #8a8a9a;
+      line-height: 1.7;
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    /* ===== Postulates dynamic bg ===== */
+    .postulates-section {
+      position: relative;
+      overflow: hidden;
+    }
+    .postulates-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(139,92,246,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(139,92,246,0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.01) 0%, transparent 30%);
+      animation: postBgShift 12s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes postBgShift {
+      0% { transform: scale(1) rotate(0deg); opacity: 0.6; }
+      50% { transform: scale(1.1) rotate(1deg); opacity: 1; }
+      100% { transform: scale(0.95) rotate(-1deg); opacity: 0.7; }
+    }
+    .postulates-section .bg-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      animation: orbFloat 10s ease-in-out infinite alternate;
+    }
+    .postulates-section .bg-orb:nth-child(1) {
+      width: 400px; height: 400px;
+      background: rgba(139,92,246,0.04);
+      top: -100px; left: -100px;
+      animation-duration: 14s;
+    }
+    .postulates-section .bg-orb:nth-child(2) {
+      width: 300px; height: 300px;
+      background: rgba(139,92,246,0.03);
+      bottom: -80px; right: -80px;
+      animation-duration: 18s;
+      animation-delay: -4s;
+    }
+    .postulates-section .bg-orb:nth-child(3) {
+      width: 200px; height: 200px;
+      background: rgba(255,255,255,0.02);
+      top: 50%; left: 60%;
+      animation-duration: 12s;
+      animation-delay: -8s;
+    }
+    @keyframes orbFloat {
+      0% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -20px) scale(1.1); }
+      66% { transform: translate(-20px, 30px) scale(0.9); }
+      100% { transform: translate(15px, -10px) scale(1.05); }
+    }
+
+    /* ===== Empty state ===== */
+    .empty-state-section {
+      text-align: center;
+      padding: 60px 20px;
+    }
+    .empty-state-section i {
+      font-size: 48px;
+      color: rgba(139,92,246,0.2);
+      margin-bottom: 16px;
+    }
+    .empty-state-section p {
+      font-size: 16px;
+      color: #6a6a7a;
+    }
+
+    /* ===== Enhanced contacts ===== */
+    .contacts-grid.two-cols {
+      gap: 20px;
+    }
+    .contact-card {
+      position: relative;
+      background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid rgba(139,92,246,0.08);
+      border-radius: 18px;
+      padding: 40px 32px;
+      text-align: center;
+      backdrop-filter: blur(4px);
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.23,1,0.32,1);
+    }
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #8b5cf6, transparent);
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+    .contact-card:hover::before { opacity: 1; }
+    .contact-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--cx,50%) var(--cy,50%), rgba(139,92,246,0.05), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.5s;
+      pointer-events: none;
+    }
+    .contact-card:hover::after { opacity: 1; }
+    .contact-card:hover {
+      border-color: rgba(139,92,246,0.2);
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.35), 0 0 30px rgba(139,92,246,0.04);
+    }
+    .contact-icon {
+      width: 68px; height: 68px;
+      line-height: 68px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(139,92,246,0.12), rgba(139,92,246,0.03));
+      border: 1px solid rgba(139,92,246,0.1);
+      margin: 0 auto 18px;
+      font-size: 28px;
+      color: #8b5cf6;
+      transition: all 0.5s;
+      position: relative;
+    }
+    .contact-card:hover .contact-icon {
+      transform: scale(1.1) rotate(-5deg);
+      border-color: rgba(139,92,246,0.3);
+      box-shadow: 0 0 30px rgba(139,92,246,0.12);
+    }
+    .contact-card h3 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .contact-card p {
+      font-size: 14px;
+      color: #8a8a9a;
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #8b5cf6;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 10px;
+      background: rgba(139,92,246,0.06);
+      border: 1px solid rgba(139,92,246,0.1);
+      transition: all 0.3s;
+    }
+    .contact-link:hover {
+      gap: 12px;
+      background: rgba(139,92,246,0.1);
+      border-color: rgba(139,92,246,0.25);
+      box-shadow: 0 4px 20px rgba(139,92,246,0.08);
+    }
+
+    /* ===== Location section ===== */
+    .location-section {
+      background: transparent !important;
+    }
+    .location-showcase {
+      max-width: 800px;
+      margin: 0 auto 48px;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+    }
+    .location-main-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+    }
+    .loc-img-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse at 30% 40%, rgba(139,92,246,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 60%, rgba(99,102,241,0.1) 0%, transparent 50%),
+        linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+      font-size: 80px;
+      color: rgba(139,92,246,0.25);
+      position: relative;
+    }
+    .loc-img-placeholder::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,0.02) 60px, rgba(255,255,255,0.02) 61px),
+        repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.02) 60px, rgba(255,255,255,0.02) 61px);
+    }
+    .loc-img-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0; right: 0;
+      padding: 32px 28px 24px;
+      background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, transparent 100%);
+    }
+    .loc-img-caption h3 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .loc-img-caption p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+    }
+    .location-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .loc-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 28px 24px;
+      transition: all 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+    .loc-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 0;
+      background: linear-gradient(180deg, #8b5cf6, transparent);
+      transition: height 0.4s ease;
+    }
+    .loc-card:hover::before { height: 100%; }
+    .loc-card:hover {
+      border-color: rgba(139,92,246,0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .loc-card-icon {
+      font-size: 28px;
+      color: #8b5cf6;
+      margin-bottom: 14px;
+      transition: transform 0.3s;
+    }
+    .loc-card:hover .loc-card-icon { transform: scale(1.1); }
+    .loc-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .loc-card p {
+      font-size: 14px;
+      color: #8a8a9a;
+      line-height: 1.7;
+    }
+    .loc-address {
+      font-size: 14px;
+      line-height: 1.8;
+      color: #b0b0c0;
+      margin-bottom: 16px;
+    }
+    .loc-route-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .loc-route-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: #b0b0c0;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .loc-route-list li:last-child { border-bottom: none; }
+    .loc-route-list li i {
+      width: 18px;
+      color: #8b5cf6;
+      font-size: 13px;
+      text-align: center;
+    }
+    .loc-schedule {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 14px;
+    }
+    .loc-schedule span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #b0b0c0;
+    }
+    .loc-schedule span i {
+      width: 16px;
+      color: #8b5cf6;
+      font-size: 12px;
+    }
+    .location-note {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 600px;
+      margin: 40px auto 0;
+      padding: 16px 20px;
+      border-radius: 12px;
+      background: rgba(139,92,246,0.04);
+      border: 1px solid rgba(139,92,246,0.08);
+      font-size: 14px;
+      color: #b0b0c0;
+      line-height: 1.7;
+    }
+    .location-note i {
+      font-size: 20px;
+      color: #8b5cf6;
+      flex-shrink: 0;
+    }
+    @media (max-width: 700px) {
+      .location-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ===== Members roster ===== */
+    .roster-tree {
+      position: relative;
+    }
+    .roster-tree::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 50%;
+      width: 1px;
+      background: linear-gradient(180deg, rgba(139,92,246,0.3), rgba(139,92,246,0.1), rgba(139,92,246,0.3));
+      transform: translateX(-50%);
+      z-index: 0;
+    }
+
+    .roster-group {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 20px;
+      padding: 28px 24px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.01);
+      border: 1px solid rgba(255,255,255,0.04);
+      backdrop-filter: blur(2px);
+      transition: all 0.3s;
+    }
+    .roster-group:last-child { margin-bottom: 0; }
+
+    .roster-group.group-owner {
+      border-color: rgba(139,92,246,0.12);
+      background: radial-gradient(ellipse at 50% 0%, rgba(139,92,246,0.06), transparent 80%);
+    }
+    .roster-group.group-dep-owner {
+      border-color: rgba(99,102,241,0.1);
+      background: radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.04), transparent 80%);
+    }
+    .roster-group.group-underboss {
+      border-color: rgba(180,60,60,0.08);
+      background: radial-gradient(ellipse at 50% 0%, rgba(180,60,60,0.03), transparent 80%);
+    }
+    .roster-group.group-charon {
+      border-color: rgba(60,130,180,0.08);
+      background: radial-gradient(ellipse at 50% 0%, rgba(60,130,180,0.03), transparent 80%);
+    }
+    .roster-group.group-regular {
+      border-color: rgba(255,255,255,0.04);
+      background: radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.02), transparent 80%);
+    }
+
+    .roster-group::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: 15%; right: 15%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--group-accent, rgba(139,92,246,0.2)), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .roster-group:hover::before { opacity: 1; }
+
+    .roster-group.group-owner { --group-accent: rgba(139,92,246,0.3); }
+    .roster-group.group-dep-owner { --group-accent: rgba(99,102,241,0.25); }
+    .roster-group.group-underboss { --group-accent: rgba(200,70,70,0.2); }
+    .roster-group.group-charon { --group-accent: rgba(70,140,200,0.2); }
+    .roster-group.group-regular { --group-accent: rgba(255,255,255,0.1); }
+
+    .roster-group:hover {
+      border-color: var(--group-accent, rgba(139,92,246,0.15));
+      box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+    }
+
+    .roster-tree-connector {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      height: 32px;
+    }
+    .roster-tree-connector::before {
+      content: '';
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(139,92,246,0.2), rgba(139,92,246,0.1));
+    }
+    .roster-tree-connector .connector-dot {
+      position: absolute;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #8b5cf6;
+      box-shadow: 0 0 12px rgba(139,92,246,0.3);
+      animation: connectorPulse 2.5s ease-in-out infinite;
+    }
+    @keyframes connectorPulse {
+      0%, 100% { box-shadow: 0 0 8px rgba(139,92,246,0.2); transform: scale(1); }
+      50% { box-shadow: 0 0 20px rgba(139,92,246,0.4); transform: scale(1.2); }
+    }
+
+    .roster-group-header {
+      text-align: center;
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .roster-group-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 8px 24px;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .roster-group-title .title-icon {
+      font-size: 18px;
+      color: #a78bfa;
+      filter: drop-shadow(0 0 6px rgba(139,92,246,0.1));
+    }
+    .roster-group:hover .title-icon {
+      filter: drop-shadow(0 0 10px rgba(139,92,246,0.25));
+    }
+    .group-owner .roster-group-title {
+      background: rgba(139,92,246,0.08);
+      border-color: rgba(139,92,246,0.15);
+      font-size: 17px;
+    }
+    .group-dep-owner .roster-group-title {
+      background: rgba(99,102,241,0.06);
+      border-color: rgba(99,102,241,0.12);
+    }
+    .group-underboss .roster-group-title {
+      background: rgba(180,60,60,0.06);
+      border-color: rgba(180,60,60,0.12);
+    }
+    .group-charon .roster-group-title {
+      background: rgba(60,130,180,0.06);
+      border-color: rgba(60,130,180,0.12);
+    }
+
+    .roster-grid {
+      display: grid;
+      gap: 16px;
+      justify-content: center;
+    }
+    .group-owner .roster-grid,
+    .group-dep-owner .roster-grid {
+      grid-template-columns: repeat(2, 240px);
+    }
+    .group-underboss .roster-grid,
+    .group-charon .roster-grid {
+      grid-template-columns: repeat(3, 180px);
+    }
+    .group-regular .roster-grid {
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .roster-card {
+      text-align: center;
+      padding: 24px 16px 20px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: all 0.35s cubic-bezier(0.23,1,0.32,1);
+      position: relative;
+      overflow: hidden;
+      animation: cardAppear 0.5s ease both;
+    }
+    .roster-card:nth-child(1) { animation-delay: 0.05s; }
+    .roster-card:nth-child(2) { animation-delay: 0.12s; }
+    .roster-card:nth-child(3) { animation-delay: 0.19s; }
+    .roster-card:nth-child(4) { animation-delay: 0.26s; }
+    .roster-card:nth-child(5) { animation-delay: 0.33s; }
+    @keyframes cardAppear {
+      from { opacity: 0; transform: translateY(20px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .roster-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(139,92,246,0.03), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+    .roster-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 20%; right: 20%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--card-accent, rgba(139,92,246,0.15)), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .roster-card:hover::before { opacity: 1; }
+    .roster-card:hover::after { opacity: 1; }
+
+    .group-owner .roster-card { --card-accent: rgba(139,92,246,0.3); }
+    .group-dep-owner .roster-card { --card-accent: rgba(99,102,241,0.2); }
+    .group-underboss .roster-card { --card-accent: rgba(200,70,70,0.15); }
+    .group-charon .roster-card { --card-accent: rgba(70,140,200,0.15); }
+    .group-regular .roster-card { --card-accent: rgba(255,255,255,0.08); }
+
+    .group-owner .roster-card {
+      background: rgba(255,255,255,0.03);
+      border-color: rgba(139,92,246,0.1);
+    }
+    .group-owner .roster-card:hover {
+      border-color: rgba(139,92,246,0.25);
+      transform: translateY(-6px);
+      box-shadow: 0 12px 40px rgba(139,92,246,0.08), 0 0 60px rgba(139,92,246,0.03);
+    }
+    .group-dep-owner .roster-card:hover {
+      border-color: rgba(99,102,241,0.2);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(99,102,241,0.06);
+    }
+    .group-underboss .roster-card:hover {
+      border-color: rgba(200,70,70,0.15);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(200,70,70,0.05);
+    }
+    .group-charon .roster-card:hover {
+      border-color: rgba(70,140,200,0.15);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(70,140,200,0.05);
+    }
+
+    .roster-photo {
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      font-weight: 700;
+      overflow: hidden;
+      transition: all 0.4s;
+      position: relative;
+    }
+    .group-owner .roster-photo,
+    .group-dep-owner .roster-photo {
+      width: 120px; height: 120px;
+      font-size: 36px;
+      background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(139,92,246,0.05));
+      border: 2px solid rgba(139,92,246,0.2);
+      box-shadow: 0 0 30px rgba(139,92,246,0.06);
+    }
+    .group-dep-owner .roster-photo {
+      background: linear-gradient(135deg, rgba(99,102,241,0.18), rgba(99,102,241,0.04));
+      border: 2px solid rgba(99,102,241,0.15);
+    }
+    .group-underboss .roster-photo {
+      width: 90px; height: 90px;
+      font-size: 26px;
+      background: linear-gradient(135deg, rgba(180,60,60,0.15), rgba(180,60,60,0.03));
+      border: 2px solid rgba(180,60,60,0.12);
+      color: rgba(200,80,80,0.8);
+    }
+    .group-charon .roster-photo {
+      width: 90px; height: 90px;
+      font-size: 26px;
+      background: linear-gradient(135deg, rgba(60,130,180,0.15), rgba(60,130,180,0.03));
+      border: 2px solid rgba(60,130,180,0.12);
+      color: rgba(80,140,200,0.8);
+    }
+    .group-regular .roster-photo {
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      border: 2px solid rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.5);
+    }
+
+    .roster-card:hover .roster-photo {
+      transform: scale(1.08);
+    }
+    .group-owner .roster-card:hover .roster-photo {
+      border-color: rgba(139,92,246,0.4);
+      box-shadow: 0 0 40px rgba(139,92,246,0.12);
+    }
+
+    .roster-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .roster-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #e8e8ec;
+      line-height: 1.35;
+      transition: color 0.3s;
+    }
+    .group-owner .roster-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .roster-role-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-top: 8px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .roster-card:hover .roster-role-label { opacity: 1; }
+    .group-owner .roster-role-label { color: rgba(139,92,246,0.5); }
+    .group-dep-owner .roster-role-label { color: rgba(99,102,241,0.4); }
+    .group-underboss .roster-role-label { color: rgba(200,70,70,0.35); }
+    .group-charon .roster-role-label { color: rgba(70,140,200,0.35); }
+
+    .roster-card.edit-mode .roster-name {
+      cursor: text;
+      border-bottom: 1px dashed rgba(139,92,246,0.3);
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    .roster-card.edit-mode .roster-name:focus {
+      outline: none;
+      border-color: #8b5cf6;
+      background: rgba(139,92,246,0.06);
+    }
+    .roster-card.edit-mode .roster-photo {
+      cursor: pointer;
+      border-style: dashed;
+    }
+
+    .roster-empty {
+      grid-column: 1 / -1;
+      padding: 40px 20px;
+      text-align: center;
+      color: rgba(255,255,255,0.2);
+      font-size: 14px;
+      border: 1px dashed rgba(255,255,255,0.06);
+      border-radius: 12px;
+    }
+    .roster-empty i {
+      display: block;
+      font-size: 28px;
+      margin-bottom: 8px;
+      opacity: 0.4;
+    }
+
+    .roster-actions {
+      display: flex;
+      gap: 6px;
+      position: absolute;
+      top: 8px; right: 8px;
+      opacity: 0;
+      transition: opacity 0.2s;
+      z-index: 2;
+    }
+    .roster-card.edit-mode .roster-actions { opacity: 1; }
+    .roster-card:hover .roster-actions { opacity: 1; }
+    .roster-btn {
+      width: 26px; height: 26px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      color: rgba(255,255,255,0.5);
+      font-size: 11px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .roster-btn:hover { color: #fff; }
+    .roster-btn.delete-btn:hover {
+      background: rgba(239,68,68,0.2);
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    .roster-group-actions {
+      text-align: center;
+      margin-top: 16px;
+    }
+    .roster-add-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 18px;
+      border-radius: 100px;
+      border: 1px dashed rgba(139,92,246,0.15);
+      background: transparent;
+      color: #8b5cf6;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .roster-add-btn:hover {
+      border-color: #8b5cf6;
+      background: rgba(139,92,246,0.06);
+    }
+
+    /* ===== Native Apply Form ===== */
+    .naf-container {
+      position: relative;
+      background: linear-gradient(145deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005));
+      border: 1px solid rgba(139,92,246,0.08);
+      border-radius: 28px;
+      overflow: hidden;
+      max-width: 640px;
+      margin: 0 auto;
+      backdrop-filter: blur(6px);
+      transition: box-shadow 0.5s;
+    }
+    .naf-container::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 29px;
+      background: linear-gradient(135deg, rgba(139,92,246,0.06), transparent 40%, rgba(139,92,246,0.02) 80%, transparent);
+      z-index: -1;
+      pointer-events: none;
+      animation: nafBorderGlow 8s ease-in-out infinite alternate;
+    }
+    @keyframes nafBorderGlow {
+      0% { opacity: 0.3; }
+      50% { opacity: 0.7; }
+      100% { opacity: 0.4; }
+    }
+    .naf-glow {
+      position: absolute;
+      top: -180px; left: 50%;
+      transform: translateX(-50%);
+      width: 600px; height: 300px;
+      background: radial-gradient(ellipse, rgba(139,92,246,0.07), transparent 70%);
+      pointer-events: none;
+      animation: nafGlowPulse 6s ease-in-out infinite alternate;
+    }
+    @keyframes nafGlowPulse {
+      0% { transform: translateX(-50%) scale(1); opacity: 0.6; }
+      100% { transform: translateX(-50%) scale(1.15); opacity: 1; }
+    }
+    .naf-glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      pointer-events: none;
+      opacity: 0.4;
+      animation: nafOrbFloat 12s ease-in-out infinite alternate;
+    }
+    .naf-glow-orb.orb-a { width: 250px; height: 250px; background: rgba(139,92,246,0.05); top: -60px; right: -80px; animation-duration: 14s; }
+    .naf-glow-orb.orb-b { width: 200px; height: 200px; background: rgba(99,102,241,0.04); bottom: -40px; left: -60px; animation-duration: 18s; animation-delay: -5s; }
+    .naf-glow-orb.orb-c { width: 150px; height: 150px; background: rgba(255,255,255,0.02); top: 40%; left: -30px; animation-duration: 10s; animation-delay: -10s; }
+    @keyframes nafOrbFloat {
+      0% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(20px, -15px) scale(1.1); }
+      66% { transform: translate(-15px, 20px) scale(0.9); }
+      100% { transform: translate(10px, -10px) scale(1.05); }
+    }
+
+    .naf-corner-deco {
+      position: absolute;
+      width: 40px; height: 40px;
+      pointer-events: none;
+      opacity: 0.15;
+    }
+    .naf-corner-deco.tl { top: -1px; left: -1px; border-top: 2px solid rgba(139,92,246,0.15); border-left: 2px solid rgba(139,92,246,0.15); border-radius: 28px 0 0 0; }
+    .naf-corner-deco.tr { top: -1px; right: -1px; border-top: 2px solid rgba(139,92,246,0.15); border-right: 2px solid rgba(139,92,246,0.15); border-radius: 0 28px 0 0; }
+    .naf-corner-deco.bl { bottom: -1px; left: -1px; border-bottom: 2px solid rgba(139,92,246,0.15); border-left: 2px solid rgba(139,92,246,0.15); border-radius: 0 0 0 28px; }
+    .naf-corner-deco.br { bottom: -1px; right: -1px; border-bottom: 2px solid rgba(139,92,246,0.15); border-right: 2px solid rgba(139,92,246,0.15); border-radius: 0 0 28px 0; }
+
+    .naf-header {
+      padding: 28px 36px 22px;
+      border-bottom: 1px solid rgba(139,92,246,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      background: linear-gradient(180deg, rgba(139,92,246,0.02), transparent);
+    }
+    .naf-header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(139,92,246,0.08), transparent);
+      opacity: 0.5;
+      animation: nafHeaderShine 4s ease-in-out infinite;
+    }
+    @keyframes nafHeaderShine {
+      0%, 100% { opacity: 0.2; transform: scaleX(1); }
+      50% { opacity: 0.6; transform: scaleX(1.05); }
+    }
+    .naf-header-left { display: flex; align-items: center; gap: 16px; }
+    .naf-logo-ring {
+      width: 52px; height: 52px;
+      border-radius: 16px;
+      flex-shrink: 0;
+      position: relative;
+      background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(139,92,246,0.03));
+      border: 1px solid rgba(139,92,246,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: #a78bfa;
+      font-size: 24px;
+      transition: all 0.4s;
+    }
+    .naf-logo-ring::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, transparent, rgba(139,92,246,0.1), transparent);
+      pointer-events: none;
+    }
+    .naf-logo-ring::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.04), transparent 60%);
+      pointer-events: none;
+    }
+    .naf-logo-pulse {
+      position: absolute;
+      inset: -3px;
+      border-radius: 18px;
+      border: 1px solid rgba(139,92,246,0.12);
+      animation: nafPulseRing 3s ease-in-out infinite;
+    }
+    @keyframes nafPulseRing {
+      0%,100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0; transform: scale(1.08); }
+    }
+    .naf-header-title { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; }
+    .naf-grad {
+      background: linear-gradient(135deg, #eef0f8, #c4b5fd, #a78bfa, #8b5cf6);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-size: 200% 200%;
+      animation: nafGradShimmer 6s ease-in-out infinite alternate;
+    }
+    @keyframes nafGradShimmer {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .naf-header-sub { font-size: 11px; color: rgba(136,146,176,0.35); margin-top: 2px; letter-spacing: 0.4px; }
+    .naf-badge {
+      display: flex; align-items: center; gap: 6px;
+      background: linear-gradient(135deg, rgba(139,92,246,0.06), rgba(139,92,246,0.02));
+      border: 1px solid rgba(139,92,246,0.08);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(139,92,246,0.45);
+      position: relative;
+      overflow: hidden;
+    }
+    .naf-badge::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(139,92,246,0.03), transparent);
+      animation: nafBadgeShimmer 5s ease-in-out infinite;
+    }
+    @keyframes nafBadgeShimmer {
+      0% { transform: translateX(-100%); }
+      50% { transform: translateX(100%); }
+      100% { transform: translateX(100%); }
+    }
+    .naf-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #57F287;
+      animation: nafDotPulse 2s ease-in-out infinite;
+      position: relative;
+    }
+    .naf-dot::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: rgba(87,242,135,0.1);
+      animation: nafDotRipple 2s ease-in-out infinite;
+    }
+    @keyframes nafDotRipple {
+      0%, 100% { transform: scale(1); opacity: 0.3; }
+      50% { transform: scale(1.5); opacity: 0; }
+    }
+    @keyframes nafDotPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.2; } }
+    .naf-body { padding: 22px 36px 30px; }
+
+    .naf-step-indicator {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0; margin-bottom: 28px; padding: 8px 14px;
+      background: rgba(255,255,255,0.01);
+      border-radius: 16px;
+      border: 1px solid rgba(139,92,246,0.03);
+      position: relative;
+      overflow: hidden;
+    }
+    .naf-step-indicator::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 200%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(139,92,246,0.04), transparent);
+      animation: nafIndShimmer 6s linear infinite;
+    }
+    @keyframes nafIndShimmer {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(50%); }
+    }
+    .naf-step-point { display: flex; align-items: center; gap: 8px; z-index: 1; }
+    .naf-step-circle {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 600;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+    .naf-step-circle.active {
+      background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+      color: #fff;
+      box-shadow: 0 0 20px rgba(139,92,246,0.25), 0 0 40px rgba(139,92,246,0.1);
+      transform: scale(1.05);
+    }
+    .naf-step-circle.done {
+      background: rgba(87,242,135,0.12);
+      border: 1px solid rgba(87,242,135,0.2);
+      color: #57F287;
+      box-shadow: 0 0 15px rgba(87,242,135,0.05);
+    }
+    .naf-step-circle.pending { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.04); color: rgba(136,146,176,0.25); }
+    .naf-step-circle.done::after, .naf-step-circle.active::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 50%;
+      border: 1px solid currentColor;
+      opacity: 0.15;
+      animation: nafStepRing 2s ease-in-out infinite;
+    }
+    @keyframes nafStepRing {
+      0%, 100% { transform: scale(1); opacity: 0.15; }
+      50% { transform: scale(1.1); opacity: 0; }
+    }
+    .naf-step-label { font-size: 11px; font-weight: 500; transition: all 0.3s; white-space: nowrap; z-index: 1; }
+    .naf-step-label.active { color: rgba(139,92,246,0.6); }
+    .naf-step-label.done { color: rgba(87,242,135,0.4); }
+    .naf-step-label.pending { color: rgba(136,146,176,0.15); }
+    .naf-step-line {
+      flex: 1; height: 1px; margin: 0 12px;
+      transition: all 0.4s; max-width: 60px;
+      position: relative;
+    }
+    .naf-step-line.done { background: rgba(87,242,135,0.15); }
+    .naf-step-line.done::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(87,242,135,0.1);
+      animation: nafLinePulse 2s ease-in-out infinite;
+    }
+    @keyframes nafLinePulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+    }
+    .naf-step-line.active { background: rgba(139,92,246,0.08); }
+    .naf-step-line.pending { background: rgba(255,255,255,0.02); }
+
+    .naf-step-content { display: none; }
+    .naf-step-content.visible {
+      display: block;
+      animation: nafStepSlide 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    @keyframes nafStepSlide {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .naf-section-divider {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 18px; padding-top: 4px;
+    }
+    .naf-sd-icon {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(139,92,246,0.02));
+      border: 1px solid rgba(139,92,246,0.06);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: rgba(139,92,246,0.35);
+      flex-shrink: 0;
+      transition: all 0.3s;
+    }
+    .naf-step-content.visible .naf-sd-icon {
+      animation: nafSdPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+    }
+    @keyframes nafSdPop {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .naf-sd-title {
+      font-size: 12px; font-weight: 600;
+      color: rgba(139,92,246,0.35);
+      letter-spacing: 0.5px; text-transform: uppercase;
+    }
+    .naf-sd-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(139,92,246,0.06), transparent); }
+
+    .naf-field {
+      margin-bottom: 16px;
+      transition: transform 0.3s;
+    }
+    .naf-field label {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 12px; font-weight: 500;
+      color: rgba(176,184,221,0.4);
+      margin-bottom: 5px;
+      transition: all 0.25s;
+      transform-origin: left;
+    }
+    .naf-field:focus-within label { color: rgba(139,92,246,0.55); transform: translateX(2px); }
+    .naf-req { color: #ef4444; font-size: 14px; font-weight: 400; animation: nafReqPulse 2s ease-in-out infinite; }
+    @keyframes nafReqPulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .naf-input-wrap { position: relative; }
+    .naf-ii {
+      position: absolute; left: 13px; top: 50%;
+      transform: translateY(-50%);
+      color: rgba(136,146,176,0.12);
+      font-size: 13px;
+      transition: all 0.3s;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .naf-field:focus-within .naf-ii { color: rgba(139,92,246,0.3); transform: translateY(-50%) scale(1.1); }
+    .naf-input-wrap input, .naf-input-wrap textarea {
+      width: 100%;
+      background: rgba(18,23,36,0.4);
+      border: 1px solid rgba(139,92,246,0.04);
+      border-radius: 11px;
+      padding: 12px 14px 12px 40px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: #d0d4e8;
+      outline: none;
+      transition: all 0.3s;
+      position: relative;
+    }
+    .naf-input-wrap textarea { padding-left: 14px; resize: vertical; min-height: 85px; }
+    .naf-input-wrap input:focus, .naf-input-wrap textarea:focus {
+      border-color: rgba(139,92,246,0.15);
+      background: rgba(18,23,36,0.55);
+      box-shadow: 0 0 0 4px rgba(139,92,246,0.03), 0 0 40px rgba(139,92,246,0.02);
+      transform: scale(1.005);
+    }
+    .naf-input-wrap input:hover, .naf-input-wrap textarea:hover {
+      border-color: rgba(139,92,246,0.08);
+      background: rgba(18,23,36,0.45);
+    }
+    .naf-input-wrap input::placeholder, .naf-input-wrap textarea::placeholder {
+      color: rgba(74,82,112,0.3);
+      font-weight: 300;
+    }
+    .naf-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .naf-radio-el { display: flex; gap: 10px; margin-top: 4px; }
+    .naf-radio-el label {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      gap: 8px;
+      background: rgba(18,23,36,0.35);
+      border: 1px solid rgba(139,92,246,0.04);
+      border-radius: 11px; padding: 12px 16px;
+      cursor: pointer; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+      font-size: 13px; font-weight: 400;
+      color: rgba(176,184,221,0.25);
+      margin-bottom: 0; position: relative; overflow: hidden;
+    }
+    .naf-radio-el label::before {
+      content: ''; position: absolute; inset: 0;
+      opacity: 0;
+      background: linear-gradient(135deg, rgba(139,92,246,0.06), transparent);
+      transition: opacity 0.3s;
+    }
+    .naf-radio-el label::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%; right: 50%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(139,92,246,0.08), transparent);
+      opacity: 0;
+      transition: all 0.3s;
+    }
+    .naf-radio-el label:hover {
+      border-color: rgba(139,92,246,0.1);
+      background: rgba(139,92,246,0.03);
+      transform: translateY(-1px);
+    }
+    .naf-radio-el label:hover::before { opacity: 1; }
+    .naf-radio-el label:hover::after { opacity: 1; left: 20%; right: 20%; }
+    .naf-radio-el label:has(input:checked) {
+      border-color: rgba(139,92,246,0.18);
+      background: rgba(139,92,246,0.05);
+      color: rgba(139,92,246,0.55);
+      box-shadow: 0 0 25px rgba(139,92,246,0.04), inset 0 0 20px rgba(139,92,246,0.02);
+      transform: translateY(-1px);
+    }
+    .naf-radio-el label:has(input:checked)::before { opacity: 1; }
+    .naf-radio-el label:has(input:checked)::after { opacity: 1; left: 20%; right: 20%; background: linear-gradient(90deg, transparent, rgba(139,92,246,0.12), transparent); }
+    .naf-radio-el input[type="radio"] { display: none; }
+    .naf-radio-el label i { font-size: 10px; opacity: 0.15; transition: all 0.25s; }
+    .naf-radio-el label:has(input:checked) i { opacity: 0.7; transform: scale(1.1); }
+
+    .naf-step-nav {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-top: 22px; padding-top: 18px;
+      border-top: 1px solid rgba(139,92,246,0.03);
+    }
+    .naf-step-btn {
+      background: rgba(255,255,255,0.015);
+      border: 1px solid rgba(139,92,246,0.05);
+      color: rgba(176,184,221,0.2);
+      padding: 10px 22px; border-radius: 10px;
+      cursor: pointer; font-family: 'Inter', sans-serif;
+      font-size: 13px; font-weight: 500;
+      transition: all 0.3s;
+      display: flex; align-items: center; gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    .naf-step-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(139,92,246,0.03), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .naf-step-btn:hover:not(:disabled) {
+      color: rgba(176,184,221,0.5);
+      border-color: rgba(139,92,246,0.1);
+      background: rgba(139,92,246,0.025);
+      transform: translateY(-1px);
+    }
+    .naf-step-btn:hover::before { opacity: 1; }
+    .naf-step-btn:disabled { opacity: 0.15; cursor: not-allowed; }
+
+    .naf-submit-btn {
+      background: linear-gradient(135deg, #a78bfa, #8b5cf6, #7c3aed);
+      color: #fff; border: none;
+      padding: 11px 34px; border-radius: 11px;
+      font-size: 14px; font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 4px 24px rgba(139,92,246,0.15);
+      position: relative; overflow: hidden;
+      background-size: 200% 200%;
+    }
+    .naf-submit-btn::before {
+      content: ''; position: absolute;
+      top: 0; left: -100%; width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+      transition: left 0.6s;
+    }
+    .naf-submit-btn:hover::before { left: 100%; }
+    .naf-submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(139,92,246,0.25);
+    }
+    .naf-submit-btn:active { transform: translateY(-1px); }
+    .naf-submit-btn:disabled { opacity: 0.25; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+    .naf-submit-btn i { font-size: 13px; }
+
+    .naf-review-box {
+      background: linear-gradient(135deg, rgba(139,92,246,0.025), rgba(139,92,246,0.01));
+      border: 1px solid rgba(139,92,246,0.05);
+      border-radius: 14px; padding: 18px 20px;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .naf-review-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 0;
+      background: linear-gradient(180deg, #8b5cf6, transparent);
+      transition: height 0.4s ease;
+    }
+    .naf-review-box:hover::before { height: 100%; }
+    .naf-review-title {
+      font-size: 11px; color: rgba(136,146,176,0.25);
+      margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .naf-review-row {
+      display: flex; justify-content: space-between; gap: 12px;
+      font-size: 13px; color: rgba(176,184,221,0.4);
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(139,92,246,0.02);
+      transition: background 0.2s;
+    }
+    .naf-review-row:last-child { border-bottom: none; }
+    .naf-review-row:hover { background: rgba(139,92,246,0.02); border-radius: 4px; padding: 5px 6px; margin: 0 -6px; }
+    .naf-review-row .rv { color: rgba(139,92,246,0.4); text-align: right; word-break: break-word; max-width: 55%; }
+
+    .naf-agreement {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(139,92,246,0.02);
+      border: 1px solid rgba(139,92,246,0.03);
+      border-radius: 10px; padding: 10px 14px; margin-bottom: 8px;
+      transition: all 0.3s;
+    }
+    .naf-agreement:hover { border-color: rgba(139,92,246,0.06); background: rgba(139,92,246,0.03); }
+    .naf-agreement i { color: rgba(139,92,246,0.1); font-size: 12px; }
+    .naf-agreement span { font-size: 11px; color: rgba(136,146,176,0.2); }
+
+    .naf-success-state { display: none; text-align: center; padding: 70px 36px; }
+    .naf-success-ring {
+      width: 90px; height: 90px;
+      border-radius: 50%;
+      margin: 0 auto 18px;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, rgba(87,242,135,0.08), rgba(87,242,135,0.02));
+      border: 1px solid rgba(87,242,135,0.08);
+      position: relative;
+    }
+    .naf-success-ring i { font-size: 38px; color: #57F287; animation: nafSuccessBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both; }
+    @keyframes nafSuccessBounce {
+      0% { transform: scale(0) rotate(-30deg); opacity: 0; }
+      100% { transform: scale(1) rotate(0); opacity: 1; }
+    }
+    .naf-success-ring::before {
+      content: ''; position: absolute; inset: -4px;
+      border-radius: 50%;
+      border: 1px solid rgba(87,242,135,0.05);
+      animation: nafRipple 2.5s ease-in-out infinite;
+    }
+    .naf-success-ring::after {
+      content: '';
+      position: absolute; inset: -8px;
+      border-radius: 50%;
+      border: 1px solid rgba(87,242,135,0.03);
+      animation: nafRipple 2.5s ease-in-out infinite 0.5s;
+    }
+    @keyframes nafRipple {
+      0% { transform: scale(1); opacity: 0.3; }
+      100% { transform: scale(1.2); opacity: 0; }
+    }
+    .naf-success-state h2 {
+      font-size: 24px; font-weight: 700; color: #eef0f8; margin-bottom: 4px;
+      animation: nafFadeUp 0.5s ease 0.3s both;
+    }
+    .naf-success-state p {
+      font-size: 14px; color: rgba(136,146,176,0.35); margin-bottom: 20px;
+      animation: nafFadeUp 0.5s ease 0.4s both;
+    }
+    .naf-success-lines {
+      display: flex; flex-direction: column; gap: 8px;
+      max-width: 300px; margin: 0 auto 28px;
+      animation: nafFadeUp 0.5s ease 0.5s both;
+    }
+    .naf-success-lines span {
+      font-size: 12px; color: rgba(136,146,176,0.25);
+      display: flex; align-items: center; gap: 8px; justify-content: center;
+    }
+    .naf-success-lines span i { font-size: 6px; color: rgba(87,242,135,0.15); animation: nafDotPulse 2s ease-in-out infinite; }
+    @keyframes nafFadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .naf-success-btn {
+      background: rgba(139,92,246,0.04);
+      border: 1px solid rgba(139,92,246,0.06);
+      color: rgba(139,92,246,0.35);
+      padding: 10px 24px; border-radius: 10px;
+      cursor: pointer; font-family: 'Inter', sans-serif;
+      font-size: 13px; font-weight: 500;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .naf-success-btn:hover { background: rgba(139,92,246,0.07); color: rgba(139,92,246,0.5); transform: translateY(-1px); }
+
+    .naf-footer {
+      padding: 14px 36px;
+      border-top: 1px solid rgba(139,92,246,0.03);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      font-size: 11px; color: rgba(58,64,88,0.3);
+      background: linear-gradient(0deg, rgba(0,0,0,0.08), rgba(0,0,0,0.02));
+      letter-spacing: 0.3px;
+      position: relative;
+    }
+    .naf-footer::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(139,92,246,0.04), transparent);
+    }
+    .naf-footer i { font-size: 10px; color: rgba(139,92,246,0.1); transition: all 0.3s; }
+    .naf-footer:hover i { color: rgba(139,92,246,0.2); transform: rotate(360deg); }
+
+    .naf-alert {
+      position: fixed; bottom: 30px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: rgba(20,10,22,0.92);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(239,68,68,0.12);
+      border-radius: 14px; padding: 14px 24px;
+      font-size: 13px; color: #ef4444;
+      gap: 12px; align-items: center;
+      z-index: 1000;
+      box-shadow: 0 12px 60px rgba(0,0,0,0.5);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
+      opacity: 0; pointer-events: none;
+      display: flex;
+    }
+    .naf-alert.show { transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: auto; }
+    .naf-alert i { font-size: 16px; animation: nafAlertShake 0.5s ease; }
+    @keyframes nafAlertShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-4px); }
+      40% { transform: translateX(4px); }
+      60% { transform: translateX(-2px); }
+      80% { transform: translateX(2px); }
+    }
+    .naf-alert-close {
+      margin-left: 10px; background: none; border: none;
+      color: rgba(239,68,68,0.2); cursor: pointer;
+      font-size: 16px; padding: 2px; transition: all 0.2s;
+    }
+    .naf-alert-close:hover { color: rgba(239,68,68,0.5); transform: scale(1.1); }
+
+    @media (max-width: 750px) {
+      .naf-header { padding: 18px 18px 16px; flex-direction: column; align-items: flex-start; gap: 10px; }
+      .naf-badge { align-self: flex-start; }
+      .naf-body { padding: 16px 18px 22px; }
+      .naf-grid-2 { grid-template-columns: 1fr; }
+      .naf-header-title { font-size: 18px; }
+      .naf-logo-ring { width: 42px; height: 42px; font-size: 20px; }
+      .naf-step-indicator { overflow-x: auto; padding: 6px 10px; gap: 4px; }
+      .naf-step-label { display: none; }
+      .naf-step-line { max-width: 30px; }
+      .naf-step-nav { flex-wrap: wrap; gap: 8px; }
+      .naf-step-btn { font-size: 12px; padding: 7px 14px; }
+      .naf-submit-btn { font-size: 13px; padding: 9px 22px; }
+      .naf-success-state { padding: 50px 18px; }
+      .naf-footer { padding: 10px 18px; }
+    }
+    @media (max-width: 480px) {
+      .naf-container { border-radius: 20px; }
+      .naf-header { padding: 14px 14px 12px; }
+      .naf-body { padding: 12px 14px 18px; }
+      .naf-radio-el { flex-direction: column; gap: 8px; }
+      .naf-radio-el label { padding: 9px 14px; }
+    }
+
+    .form-wrapper {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .admin-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 36px;
+      padding: 20px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      position: relative;
+      z-index: 1;
+    }
+    .admin-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: 10px;
+      border: 1px solid rgba(139,92,246,0.12);
+      background: rgba(139,92,246,0.03);
+      color: #8b5cf6;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+      font-family: 'Inter', sans-serif;
+    }
+    .admin-toggle:hover {
+      background: rgba(139,92,246,0.08);
+      border-color: rgba(139,92,246,0.25);
+      transform: translateY(-1px);
+    }
+    .admin-toggle.active {
+      background: rgba(139,92,246,0.12);
+      border-color: #8b5cf6;
+    }
+    .admin-hint {
+      font-size: 12px;
+      color: #6a6a7a;
+    }
+
+    @media (max-width: 800px) {
+      .roster-tree::before { display: none; }
+      .group-owner .roster-grid,
+      .group-dep-owner .roster-grid { grid-template-columns: repeat(2, 1fr); }
+      .group-underboss .roster-grid,
+      .group-charon .roster-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .roster-group { padding: 20px 16px; }
+      .group-owner .roster-grid,
+      .group-dep-owner .roster-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .group-underboss .roster-grid,
+      .group-charon .roster-grid { grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+      .group-owner .roster-photo,
+      .group-dep-owner .roster-photo { width: 80px; height: 80px; font-size: 26px; }
+      .group-underboss .roster-photo,
+      .group-charon .roster-photo { width: 68px; height: 68px; font-size: 20px; }
+      .group-regular .roster-photo { width: 68px; height: 68px; font-size: 20px; }
+      .roster-card { padding: 20px 12px 16px; }
+      .roster-name { font-size: 13px; }
+      .roster-group-title { font-size: 12px; padding: 6px 14px; }
+    }
+    .tetris-wrapper {
+      max-width: 750px;
+      margin: 0 auto;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .tetris-board-wrap {
+      position: relative;
+      border: 1px solid rgba(139,92,246,0.15);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(139,92,246,0.04), inset 0 0 60px rgba(139,92,246,0.02);
+    }
+    #tetrisCanvas {
+      display: block;
+      background: rgba(0,0,0,0.25);
+    }
+    .tetris-side {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 130px;
+    }
+    .tetris-panel {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+    }
+    .tetris-panel h4 {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(139,92,246,0.4);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .tetris-panel .tetris-stat {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+    }
+    #nextCanvas {
+      display: block;
+      margin: 0 auto;
+      background: rgba(0,0,0,0.15);
+      border-radius: 8px;
+    }
+    .tetris-controls {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 16px;
+    }
+    .tetris-btn {
+      background: rgba(139,92,246,0.06);
+      border: 1px solid rgba(139,92,246,0.1);
+      color: rgba(255,255,255,0.6);
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.25s;
+    }
+    .tetris-btn:hover {
+      background: rgba(139,92,246,0.1);
+      border-color: rgba(139,92,246,0.2);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+    .tetris-mobile-controls {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .tetris-mobile-btn {
+      width: 52px; height: 52px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      color: rgba(255,255,255,0.5);
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+    .tetris-mobile-btn:active {
+      background: rgba(139,92,246,0.15);
+      border-color: rgba(139,92,246,0.2);
+      transform: scale(0.92);
+    }
+    .tetris-mobile-btn.wide { width: 80px; }
+    .tetris-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      z-index: 10;
+    }
+    .tetris-overlay h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .tetris-overlay p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 16px;
+    }
+    .tetris-overlay .tetris-btn { font-size: 15px; padding: 10px 28px; }
+    .tetris-leaderboard {
+      width: 100%;
+      max-width: 260px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .tetris-leaderboard h4 {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(139,92,246,0.4);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .tetris-lb-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .tetris-lb-table th {
+      font-size: 9px;
+      font-weight: 600;
+      color: rgba(139,92,246,0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 2px 6px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .tetris-lb-table th:first-child { width: 22px; text-align: center; }
+    .tetris-lb-table th:last-child { width: 50px; text-align: right; }
+    .tetris-lb-table td {
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      padding: 5px 2px;
+      border-bottom: 1px solid rgba(255,255,255,0.02);
+    }
+    .tetris-lb-table td:first-child {
+      text-align: center;
+      color: rgba(139,92,246,0.3);
+      font-weight: 600;
+      font-size: 10px;
+    }
+    .tetris-lb-table td:last-child {
+      text-align: right;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      color: #fff;
+    }
+    .tetris-lb-table tr.top-1 td { color: #f7e476; }
+    .tetris-lb-table tr.top-2 td { color: #b0b0c0; }
+    .tetris-lb-table tr.top-3 td { color: #d4895c; }
+    .tetris-lb-table tr.top-1 td:last-child { color: #f7e476; }
+    .tetris-lb-table tr.top-2 td:last-child { color: #b0b0c0; }
+    .tetris-lb-table tr.top-3 td:last-child { color: #d4895c; }
+    .tetris-lb-table tr.current-user td {
+      background: rgba(139,92,246,0.06);
+      border-radius: 4px;
+    }
+    .tetris-lb-name {
+      max-width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .tetris-lb-empty {
+      text-align: center;
+      padding: 20px 0;
+      font-size: 12px;
+      color: rgba(255,255,255,0.15);
+    }
+    .tetris-lb-loading {
+      text-align: center;
+      padding: 20px 0;
+      font-size: 11px;
+      color: rgba(139,92,246,0.3);
+    }
+    .tetris-keys {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 14px;
+      justify-content: center;
+      margin-top: 16px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.2);
+    }
+    .tetris-keys kbd {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+    }
+    .no-role-modal {
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+    }
+    .no-role-modal-content {
+      background: #0d0e14; border: 1px solid rgba(239,68,68,0.15);
+      border-radius: 20px; padding: 40px 36px;
+      max-width: 400px; width: 90%; text-align: center;
+      animation: fadeUp 0.4s ease;
+    }
+    .no-role-modal-icon {
+      width: 64px; height: 64px; margin: 0 auto 20px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(239,68,68,0.08); border-radius: 50%;
+      font-size: 28px; color: #ef4444;
+    }
+    .no-role-modal-content h3 {
+      font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 12px;
+    }
+    .no-role-modal-content p {
+      font-size: 14px; color: #6a6a7a; line-height: 1.6; margin-bottom: 24px;
+    }
+    .no-role-modal-content p strong { color: #8b5cf6; }
+    .no-role-modal-actions {
+      display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+    }
+    .no-role-modal-actions .btn { min-width: 120px; }
+  </style>
+  <script>
+    (function () {
+      document.addEventListener('DOMContentLoaded', function () {
+        var params = new URLSearchParams(window.location.search);
+        if (params.get('error') === 'no_role') {
+          var modal = document.getElementById('noRoleModal');
+          if (modal) modal.style.display = 'flex';
+        }
+
+        var closeBtn = document.getElementById('noRoleCloseBtn');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', function () {
+            var modal = document.getElementById('noRoleModal');
+            if (modal) modal.style.display = 'none';
+          });
+        }
+
+        var applyBtn = document.getElementById('noRoleApplyBtn');
+        if (applyBtn) {
+          applyBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            var modal = document.getElementById('noRoleModal');
+            if (modal) modal.style.display = 'none';
+            window.location.hash = '#apply';
+          });
+        }
+      });
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/api/me', true);
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          try {
+            var data = JSON.parse(xhr.responseText);
+            if (data.authenticated) {
+              var hash = window.location.hash || '#home';
+              window.location.replace('/member' + hash);
+            }
+          } catch (e) {}
+        }
+      };
+      xhr.send();
+    })();
+  </script>
 </head>
 <body>
+  <div class="global-bg">
+    <div class="global-bg-radials"></div>
+    <div class="global-bg-grid"></div>
+    <div class="global-bg-orb orb-1"></div>
+    <div class="global-bg-orb orb-2"></div>
+    <div class="global-bg-orb orb-3"></div>
+    <div class="global-bg-orb orb-4"></div>
+  </div>
+  <canvas id="particlesCanvas"></canvas>
 
   <nav class="navbar">
     <div class="nav-container">
-      <a href="#home" id="familyLogoLink" class="nav-logo">
-        <span class="logo-icon" id="familyLogoIcon">✦</span>
+      <a href="#home" class="nav-logo">
+        <span class="logo-icon">✦</span>
         <span class="logo-text">Celleste</span>
-        <span class="family-badge verified-only" id="familyBadge" style="display:none">Семья</span>
       </a>
       <button class="nav-toggle" id="navToggle" aria-label="Меню">
         <span></span><span></span><span></span>
@@ -27,13 +1960,12 @@
         <li><a href="#home" class="nav-link active">Главная</a></li>
         <li><a href="#postulates" class="nav-link">Постулаты</a></li>
         <li><a href="#members" class="nav-link">Состав семьи</a></li>
-        <li><a href="#apply" class="nav-link">Стать частью Celleste</a></li>
+        <li><a href="#location" class="nav-link">Локация</a></li>
+        <li><a href="#apply" class="nav-link">Заявка</a></li>
+        <li><a href="#tetris" class="nav-link">Тетрис</a></li>
+        <li><a href="#contacts" class="nav-link">Контакты</a></li>
       </ul>
       <div class="nav-auth">
-        <div id="userInfo" style="display:none">
-          <span id="userName"></span>
-          <button id="logoutBtn" class="btn-sm">Выйти</button>
-        </div>
         <button id="loginBtn" class="btn btn-primary nav-login-btn">Войти через Discord</button>
       </div>
     </div>
@@ -44,12 +1976,9 @@
     <!-- ===== HOME ===== -->
     <section class="page active" id="page-home">
       <div class="hero">
-        <canvas id="particlesCanvas"></canvas>
-        <div class="hero-bg"></div>
-        <div class="hero-overlay"></div>
         <div class="hero-content">
-          <div class="hero-badge">СЕМЕЙНАЯ ОРГАНИЗАЦИЯ</div>
-          <h1 class="hero-title">Семья <span class="text-gold">Celleste</span></h1>
+          <div class="hero-badge">СЕМЬЯ</div>
+          <h1 class="hero-title"><span class="text-gold">Celleste</span></h1>
           <p class="hero-subtitle">Единство. Сила. Развитие. — Мы строим будущее вместе, опираясь на вековые традиции и современное видение.</p>
           <div class="hero-actions">
             <a href="#postulates" class="btn btn-primary">Постулаты <i class="fas fa-scroll"></i></a>
@@ -61,75 +1990,104 @@
           <i class="fas fa-chevron-down"></i>
         </div>
       </div>
+
+      <div class="section about-section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag">О СЕМЬЕ</span>
+            <div class="section-divider"></div>
+          </div>
+          <div class="about-grid">
+            <div class="about-card">
+              <div class="about-icon"><i class="fas fa-crown"></i></div>
+              <h3>Наследие</h3>
+              <p>Celleste — это не просто фамилия. Это символ единства, чести и взаимной поддержки, передающийся из поколения в поколение.</p>
+            </div>
+            <div class="about-card">
+              <div class="about-icon"><i class="fas fa-hand-fist"></i></div>
+              <h3>Сила</h3>
+              <p>Вместе мы преодолеваем любые трудности. Каждый член семьи — опора для другого, и вместе мы непоколебимы.</p>
+            </div>
+            <div class="about-card">
+              <div class="about-icon"><i class="fas fa-star"></i></div>
+              <h3>Развитие</h3>
+              <p>Мы постоянно растем и развиваемся, поддерживая друг друга в начинаниях и открывая новые горизонты.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ===== POSTULATES ===== -->
     <section class="page" id="page-postulates">
       <div class="section postulates-section">
+        <div class="bg-orb"></div>
+        <div class="bg-orb"></div>
+        <div class="bg-orb"></div>
         <div class="container">
           <div class="section-header">
             <span class="section-tag"><i class="fas fa-star"></i></span>
-            <h2 class="section-title">Постулаты семьи <span class="text-gold">Celleste</span></h2>
+            <h2 class="section-title">Постулаты семьи</h2>
             <div class="section-divider"></div>
             <p class="section-desc">Влияние в тени. Контроль в действиях.</p>
           </div>
-          <div class="postulates-grid">
+          <div class="postulates-grid" id="postulateCards">
             <div class="postulate-card">
-              <div class="postulate-num">I</div>
               <div class="postulate-content">
-                <h3 class="postulate-title"><i class="fas fa-scale-balanced"></i> ЛИЦО СЕМЬИ</h3>
-                <p class="postulate-desc">Семья — это не имя. Это репутация, за которую отвечают все. Ошибка одного — ответственность каждого.</p>
+                <h3 class="postulate-title"><i class="fas fa-mask postulate-icon"></i> I. ЛИЦО СЕМЬИ</h3>
+                <p class="postulate-desc">Семья — это не имя.<br>Это репутация, за которую отвечают все.<br>Ошибка одного — ответственность каждого.</p>
               </div>
             </div>
             <div class="postulate-card">
-              <div class="postulate-num">II</div>
               <div class="postulate-content">
-                <h3 class="postulate-title"><i class="fas fa-lock"></i> ВЕРНОСТЬ</h3>
-                <p class="postulate-desc">Верность не обсуждается. — Информация не покидает круг — Решения не выносятся наружу — Свои не предаются. Нарушивший это — больше не часть семьи.</p>
+                <h3 class="postulate-title"><i class="fas fa-shield-halved postulate-icon"></i> II. ВЕРНОСТЬ</h3>
+                <p class="postulate-desc">Верность не обсуждается.<br>— Информация не покидает круг<br>— Решения не выносятся наружу<br>— Свои не предаются<br>Нарушивший это — больше не часть семьи.</p>
               </div>
             </div>
             <div class="postulate-card">
-              <div class="postulate-num">III</div>
               <div class="postulate-content">
-                <h3 class="postulate-title"><i class="fas fa-handshake"></i> УВАЖЕНИЕ</h3>
-                <p class="postulate-desc">Уважение — обязательное условие. — Внутри семьи нет места унижению — Снаружи нет места бессмысленной агрессии. Контроль важнее эмоций.</p>
+                <h3 class="postulate-title"><i class="fas fa-hand-holding-heart postulate-icon"></i> III. УВАЖЕНИЕ</h3>
+                <p class="postulate-desc">Уважение — обязательное условие.<br>— Внутри семьи нет места унижению<br>— Снаружи нет места бессмысленной агрессии<br>Контроль важнее эмоций.</p>
               </div>
             </div>
             <div class="postulate-card">
-              <div class="postulate-num">IV</div>
               <div class="postulate-content">
-                <h3 class="postulate-title"><i class="fas fa-eye"></i> ВЛАСТЬ</h3>
-                <p class="postulate-desc">Власть не демонстрируют. — Её не доказывают — Её не объясняют — Её реализуют. Те, кто говорит — не управляют.</p>
+                <h3 class="postulate-title"><i class="fas fa-crown postulate-icon"></i> IV. ВЛАСТЬ</h3>
+                <p class="postulate-desc">Власть не демонстрируют.<br>— Её не доказывают<br>— Её не объясняют<br>— Её реализуют<br>Те, кто говорит — не управляют.</p>
               </div>
             </div>
             <div class="postulate-card wide">
-              <div class="postulate-num">V</div>
               <div class="postulate-content">
-                <h3 class="postulate-title"><i class="fas fa-landmark"></i> ПОРЯДОК</h3>
-                <p class="postulate-desc">Все внутри — часть одного механизма. — Каждый голос учитывается — Каждый несёт ответственность — Последнее решение за теми, кто отвечает за последствия. Решение — это не мнение. Это итог.</p>
+                <h3 class="postulate-title"><i class="fas fa-scale-balanced postulate-icon"></i> V. ПОРЯДОК</h3>
+                <p class="postulate-desc">Все внутри — часть одного механизма.<br>— Каждый голос учитывается<br>— Каждый несёт ответственность<br>— Последнее решение за теми, кто отвечает за последствия<br>Решение — это не мнение. Это итог.</p>
               </div>
             </div>
             <div class="postulate-card">
-              <div class="postulate-num">VI</div>
               <div class="postulate-content">
-                <h3 class="postulate-title"><i class="fas fa-masks-theater"></i> ПОВЕДЕНИЕ</h3>
-                <p class="postulate-desc">Эмоции — слабость, если они вне контроля. — В конфликте сохраняется холод — В шутке сохраняется грань — В любой ситуации сохраняется лицо. Потерял контроль — потерял позицию.</p>
+                <h3 class="postulate-title"><i class="fas fa-masks-theater postulate-icon"></i> VI. ПОВЕДЕНИЕ</h3>
+                <p class="postulate-desc">Эмоции — слабость, если они вне контроля.<br>— В конфликте сохраняется холод<br>— В шутке сохраняется грань<br>— В любой ситуации сохраняется лицо<br>Потерял контроль — потерял позицию.</p>
               </div>
             </div>
             <div class="postulate-card">
-              <div class="postulate-num">VII</div>
               <div class="postulate-content">
-                <h3 class="postulate-title"><i class="fas fa-ban"></i> ЗАПРЕТЫ</h3>
-                <p class="postulate-desc">Недопустимо: ✖ Неуважение к своим ✖ Слив информации ✖ Действия против интересов семьи. Нарушение — это выход. Без обсуждений.</p>
+                <h3 class="postulate-title"><i class="fas fa-ban postulate-icon"></i> VII. ЗАПРЕТЫ</h3>
+                <p class="postulate-desc">Недопустимо:<br>✖ Неуважение к своим<br>✖ Слив информации<br>✖ Действия против интересов семьи<br><br>Нарушение — это выход. Без обсуждений.</p>
               </div>
             </div>
             <div class="postulate-card">
-              <div class="postulate-num">VIII</div>
               <div class="postulate-content">
-                <h3 class="postulate-title"><i class="fas fa-candle-holder"></i> СИЛА</h3>
-                <p class="postulate-desc">Сила не нуждается в признании. Она проявляется в решениях, действиях и последствиях. Кто требует внимания — не контролирует его.</p>
+                <h3 class="postulate-title"><i class="fas fa-dragon postulate-icon"></i> VIII. СИЛА</h3>
+                <p class="postulate-desc">Сила не нуждается в признании.<br>Она проявляется в решениях, действиях и последствиях.<br>Кто требует внимания — не контролирует его.</p>
               </div>
             </div>
+          </div>
+          <div style="text-align:center;margin-top:28px">
+            <button id="adminEditBtnP" class="btn btn-primary" style="display:none">
+              <i class="fas fa-pen"></i> Редактировать
+            </button>
+            <button id="adminSaveBtnP" class="btn btn-primary" style="display:none">
+              <i class="fas fa-save"></i> Сохранить
+            </button>
           </div>
         </div>
       </div>
@@ -143,11 +2101,84 @@
             <span class="section-tag"><i class="fas fa-users"></i></span>
             <h2 class="section-title">Состав семьи <span class="text-gold">Celleste</span></h2>
             <div class="section-divider"></div>
-            <p class="section-desc">Информация будет добавлена позже</p>
+            <p class="section-desc">Иерархия и состав семьи Celleste</p>
           </div>
-          <div class="empty-state-section">
-            <i class="fas fa-users"></i>
-            <p>Состав семьи скоро будет опубликован</p>
+          <div id="membersRoster"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== LOCATION ===== -->
+    <section class="page" id="page-location">
+      <div class="section location-section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag"><i class="fas fa-map-marked-alt"></i></span>
+            <h2 class="section-title">Наша <span class="text-gold">локация</span></h2>
+            <div class="section-divider"></div>
+            <p class="section-desc">Особняк Celleste — место, где рождается наша сила и единство</p>
+          </div>
+
+          <div class="location-showcase">
+            <div class="location-main-img">
+              <div class="loc-img-placeholder">
+                <i class="fas fa-landmark"></i>
+              </div>
+              <div class="loc-img-caption">
+                <h3>Особняк Celleste</h3>
+                <p>Историческое поместье, резиденция семьи</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="text-align:center;margin-bottom:20px">
+            <button id="adminEditBtnL" class="btn btn-primary" style="display:none">
+              <i class="fas fa-pen"></i> Редактировать
+            </button>
+            <button id="adminSaveBtnL" class="btn btn-primary" style="display:none">
+              <i class="fas fa-save"></i> Сохранить
+            </button>
+          </div>
+
+          <div class="location-grid" id="locationCards">
+            <div class="loc-card">
+              <div class="loc-card-icon"><i class="fas fa-map-pin"></i></div>
+              <h3>Адрес</h3>
+              <p class="loc-address">Moscow, Russia<br>Presnenskaya Embankment, 12<br>Business Center "Moscow-City"</p>
+              <a href="https://maps.google.com" target="_blank" class="contact-link">
+                <i class="fas fa-map-marker-alt"></i> Открыть на карте
+              </a>
+            </div>
+            <div class="loc-card">
+              <div class="loc-card-icon"><i class="fas fa-route"></i></div>
+              <h3>Как добраться</h3>
+              <ul class="loc-route-list">
+                <li><i class="fas fa-subway"></i> м. Деловой центр — 5 мин пешком</li>
+                <li><i class="fas fa-train"></i> МЦК Деловой центр — 3 мин</li>
+                <li><i class="fas fa-car"></i> По ТТК, съезд на Пресненскую наб.</li>
+                <li><i class="fas fa-taxi"></i> Такси до ММДЦ Москва-Сити</li>
+              </ul>
+            </div>
+            <div class="loc-card">
+              <div class="loc-card-icon"><i class="fas fa-building"></i></div>
+              <h3>Офис</h3>
+              <p>Представительство семьи Celleste работает ежедневно. Вход по предварительной договорённости.</p>
+              <div class="loc-schedule">
+                <span><i class="fas fa-clock"></i> Пн-Пт: 10:00 – 20:00</span>
+                <span><i class="fas fa-clock"></i> Сб: 12:00 – 18:00</span>
+                <span><i class="fas fa-clock"></i> Вс: по записи</span>
+              </div>
+            </div>
+            <div class="loc-card">
+              <div class="loc-card-icon"><i class="fas fa-shield-alt"></i></div>
+              <h3>Конфиденциальность</h3>
+              <p>Точные координаты резиденции семьи и охраняемых объектов предоставляются только членам семьи и подтверждённым гостям.</p>
+            </div>
+          </div>
+
+          <div class="location-note">
+            <i class="fas fa-info-circle"></i>
+            <p>Для посещения особняка свяжитесь с руководством семьи через Discord или Email</p>
           </div>
         </div>
       </div>
@@ -163,48 +2194,296 @@
             <div class="section-divider"></div>
             <p class="section-desc">Заполните форму, чтобы стать частью семьи Celleste. Мы рассматриваем каждую заявку индивидуально.</p>
           </div>
+
           <div class="form-wrapper">
-            <iframe src="https://script.google.com/macros/s/AKfycbyr1qt8gxJN4LIDvqkYSE3q-Cjp8KBPBsZCnkNgvKma3ZZQVahoza7rmnsWfvuQUxq1iQ/exec"
-                    title="Заявка в Celleste"
-                    class="apply-iframe"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-read; clipboard-write; encrypted-media; fullscreen; geolocation; gyroscope; magnetometer; payment; picture-in-picture; web-share">
-            </iframe>
+
+            <div class="naf-container" id="applyFormRoot">
+              <div class="naf-glow"></div>
+              <div class="naf-glow-orb orb-a"></div>
+              <div class="naf-glow-orb orb-b"></div>
+              <div class="naf-glow-orb orb-c"></div>
+              <div class="naf-corner-deco tl"></div>
+              <div class="naf-corner-deco tr"></div>
+              <div class="naf-corner-deco bl"></div>
+              <div class="naf-corner-deco br"></div>
+
+              <div id="nafFormState">
+                <header class="naf-header">
+                  <div class="naf-header-left">
+                    <div class="naf-logo-ring">
+                      <div class="naf-logo-pulse"></div>
+                      <i class="fas fa-crown"></i>
+                    </div>
+                    <div>
+                      <div class="naf-header-title"><span class="naf-grad">Заявка в Celleste</span></div>
+                      <div class="naf-header-sub">Вступление в семью</div>
+                    </div>
+                  </div>
+                  <span class="naf-badge"><span class="naf-dot"></span> Приём заявок</span>
+                </header>
+
+                <div class="naf-body">
+                  <div class="naf-step-indicator" id="nafStepIndicator">
+                    <div class="naf-step-point"><div class="naf-step-circle active" id="nsc1">1</div><span class="naf-step-label active" id="nsl1">Основное</span></div>
+                    <div class="naf-step-line active" id="nsl1l"></div>
+                    <div class="naf-step-point"><div class="naf-step-circle pending" id="nsc2">2</div><span class="naf-step-label pending" id="nsl2">Опыт</span></div>
+                    <div class="naf-step-line pending" id="nsl2l"></div>
+                    <div class="naf-step-point"><div class="naf-step-circle pending" id="nsc3">3</div><span class="naf-step-label pending" id="nsl3">OOC</span></div>
+                    <div class="naf-step-line pending" id="nsl3l"></div>
+                    <div class="naf-step-point"><div class="naf-step-circle pending" id="nsc4">4</div><span class="naf-step-label pending" id="nsl4">Готово</span></div>
+                  </div>
+
+                  <!-- Step 1 -->
+                  <div id="nafStep1" class="naf-step-content visible">
+                    <div class="naf-section-divider">
+                      <div class="naf-sd-icon"><i class="fas fa-user"></i></div>
+                      <span class="naf-sd-title">Личные данные (IC)</span>
+                      <span class="naf-sd-line"></span>
+                    </div>
+                    <div class="naf-field">
+                      <label>Имя Фамилия (IC) <span class="naf-req">*</span></label>
+                      <div class="naf-input-wrap">
+                        <i class="fas fa-user naf-ii"></i>
+                        <input type="text" id="nafIcName" placeholder="Sokrat Celleste">
+                      </div>
+                    </div>
+                    <div class="naf-grid-2">
+                      <div class="naf-field">
+                        <label>Паспорт (IC) <span class="naf-req">*</span></label>
+                        <div class="naf-input-wrap">
+                          <i class="fas fa-id-card naf-ii"></i>
+                          <input type="text" id="nafPassport" placeholder="67">
+                        </div>
+                      </div>
+                      <div class="naf-field">
+                        <label>Лет в штате / Lvl <span class="naf-req">*</span></label>
+                        <div class="naf-input-wrap">
+                          <i class="fas fa-chart-simple naf-ii"></i>
+                          <input type="text" id="nafStatsLvl" placeholder="67">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="naf-step-nav">
+                      <span></span>
+                      <button class="naf-step-btn" onclick="nafGoTo(2)">Далее <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                  </div>
+
+                  <!-- Step 2 -->
+                  <div id="nafStep2" class="naf-step-content">
+                    <div class="naf-section-divider">
+                      <div class="naf-sd-icon"><i class="fas fa-route"></i></div>
+                      <span class="naf-sd-title">Опыт и предпочтения</span>
+                      <span class="naf-sd-line"></span>
+                    </div>
+                    <div class="naf-field">
+                      <label>Готовы сменить фамилию на Celleste? <span class="naf-req">*</span></label>
+                      <div class="naf-radio-el">
+                        <label><input type="radio" name="nafSurname" value="Да"> <i class="fas fa-check"></i> Да</label>
+                        <label><input type="radio" name="nafSurname" value="Нет"> <i class="fas fa-xmark"></i> Нет</label>
+                      </div>
+                    </div>
+                    <div class="naf-field">
+                      <label>Какой контент предпочитаете и в каких фракциях были? <span class="naf-req">*</span></label>
+                      <div class="naf-input-wrap">
+                        <textarea id="nafContentFactions" placeholder="Опишите ваш игровой опыт..."></textarea>
+                      </div>
+                    </div>
+                    <div class="naf-step-nav">
+                      <button class="naf-step-btn" onclick="nafGoTo(1)"><i class="fas fa-arrow-left"></i> Назад</button>
+                      <button class="naf-step-btn" onclick="nafGoTo(3)">Далее <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                  </div>
+
+                  <!-- Step 3 -->
+                  <div id="nafStep3" class="naf-step-content">
+                    <div class="naf-section-divider">
+                      <div class="naf-sd-icon"><i class="fas fa-user-lock"></i></div>
+                      <span class="naf-sd-title">Дополнительно (OOC)</span>
+                      <span class="naf-sd-line"></span>
+                    </div>
+                    <div class="naf-grid-2">
+                      <div class="naf-field">
+                        <label>Имя (OOC)</label>
+                        <div class="naf-input-wrap">
+                          <i class="fas fa-user-secret naf-ii"></i>
+                          <input type="text" id="nafOocName" placeholder="Необязательно">
+                        </div>
+                      </div>
+                      <div class="naf-field">
+                        <label>Возраст (OOC)</label>
+                        <div class="naf-input-wrap">
+                          <i class="fas fa-cake-candles naf-ii"></i>
+                          <input type="text" id="nafOocAge" placeholder="Необязательно">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="naf-field">
+                      <label>Почему вы хотите попасть к нам в семью? <span class="naf-req">*</span></label>
+                      <div class="naf-input-wrap">
+                        <textarea id="nafWhyJoin" placeholder="Расскажите о ваших мотивах..."></textarea>
+                      </div>
+                    </div>
+                    <div class="naf-field">
+                      <label>Ваш юзер дискорда <span class="naf-req">*</span></label>
+                      <div class="naf-input-wrap">
+                        <i class="fab fa-discord naf-ii"></i>
+                        <input type="text" id="nafDiscordUser" placeholder="sokrat_ik">
+                      </div>
+                    </div>
+                    <div class="naf-step-nav">
+                      <button class="naf-step-btn" onclick="nafGoTo(2)"><i class="fas fa-arrow-left"></i> Назад</button>
+                      <button class="naf-step-btn" onclick="nafGoTo(4)">Далее <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                  </div>
+
+                  <!-- Step 4 -->
+                  <div id="nafStep4" class="naf-step-content">
+                    <div class="naf-section-divider">
+                      <div class="naf-sd-icon"><i class="fas fa-check"></i></div>
+                      <span class="naf-sd-title">Проверка и отправка</span>
+                      <span class="naf-sd-line"></span>
+                    </div>
+                    <div class="naf-review-box">
+                      <div class="naf-review-title">Проверьте данные</div>
+                      <div id="nafReviewContent"></div>
+                    </div>
+                    <div class="naf-agreement">
+                      <i class="fas fa-lock"></i>
+                      <span>Отправляя, вы соглашаетесь с обработкой данных</span>
+                    </div>
+                    <div class="naf-step-nav">
+                      <button class="naf-step-btn" onclick="nafGoTo(3)"><i class="fas fa-arrow-left"></i> Назад</button>
+                      <button class="naf-submit-btn" id="nafSubmitBtn" onclick="nafSubmit()">
+                        <i class="fas fa-paper-plane"></i> Отправить заявку
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Success State -->
+              <div id="nafSuccessState" class="naf-success-state">
+                <div class="naf-success-ring"><i class="fas fa-check"></i></div>
+                <h2>Заявка отправлена!</h2>
+                <p>Мы свяжемся с вами в ближайшее время</p>
+                <div class="naf-success-lines">
+                  <span><i class="fas fa-circle"></i> Проверьте Discord на наличие сообщений</span>
+                  <span><i class="fas fa-circle"></i> Ожидайте ответа от менеджера</span>
+                </div>
+                <button class="naf-success-btn" onclick="nafReset()"><i class="fas fa-redo"></i> Подать новую заявку</button>
+              </div>
+
+              <div class="naf-footer"><i class="fas fa-crown"></i> By Sokratik</div>
+            </div>
+
+            <div id="nafAlert" class="naf-alert">
+              <i class="fas fa-exclamation-circle"></i>
+              <span id="nafAlertText">Заполните все обязательные поля</span>
+              <button class="naf-alert-close" onclick="nafHideAlert()">&times;</button>
+            </div>
+
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ===== FAMILY OVERLAY (verified only) ===== -->
-    <div class="family-overlay verified-only" id="familyOverlay" style="display:none">
-      <div class="family-overlay-backdrop" id="familyOverlayBackdrop"></div>
-      <div class="family-overlay-panel">
-        <div class="family-overlay-header">
-          <h2 class="family-overlay-title">✦ Для семьи Celleste</h2>
-          <button class="family-overlay-close" id="familyOverlayClose" aria-label="Закрыть">
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
-        <div class="family-overlay-body">
-          <div class="family-cards">
-            <div class="family-card">
-              <div class="family-card-icon"><i class="fas fa-table"></i></div>
-              <h3>Таблица навыков</h3>
-              <p>Оценка и развитие навыков участников семьи. Заполняйте, отслеживайте прогресс.</p>
-              <a href="https://celleste-web.vercel.app/index.html" target="_blank" class="btn btn-primary family-card-btn">
-                Открыть таблицу <i class="fas fa-external-link-alt"></i>
-              </a>
+    <!-- ===== TETRIS ===== -->
+    <section class="page" id="page-tetris">
+      <div class="section tetris-section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag"><i class="fas fa-gamepad"></i></span>
+            <h2 class="section-title">Тетрис</h2>
+            <div class="section-divider"></div>
+            <p class="section-desc">Классическая игра</p>
+          </div>
+
+          <div id="tetrisGame">
+            <div class="tetris-wrapper">
+              <div class="tetris-board-wrap">
+                <canvas id="tetrisCanvas" width="300" height="600"></canvas>
+                <div class="tetris-overlay" id="tetrisOverlay">
+                  <h2 id="tetrisOverlayTitle">Тетрис</h2>
+                  <p id="tetrisOverlaySub">Нажмите «Старт»</p>
+                  <button class="tetris-btn" id="tetrisStartBtn">Старт</button>
+                </div>
+              </div>
+              <div class="tetris-side">
+                <div class="tetris-panel">
+                  <h4>Следующая</h4>
+                  <canvas id="nextCanvas" width="120" height="120"></canvas>
+                </div>
+                <div class="tetris-panel">
+                  <h4>Счёт</h4>
+                  <div class="tetris-stat" id="tetrisScore">0</div>
+                </div>
+                <div class="tetris-panel">
+                  <h4>Линии</h4>
+                  <div class="tetris-stat" id="tetrisLines">0</div>
+                </div>
+                <div class="tetris-panel">
+                  <h4>Уровень</h4>
+                  <div class="tetris-stat" id="tetrisLevel">1</div>
+                </div>
+              </div>
+              <div class="tetris-leaderboard" id="tetrisLeaderboard">
+                <h4>Таблица рекордов</h4>
+                <div id="tetrisLbContent">
+                  <div class="tetris-lb-loading">Загрузка...</div>
+                </div>
+              </div>
             </div>
-            <div class="family-card">
-              <div class="family-card-icon"><i class="fas fa-users"></i></div>
-              <h3>Состав семьи</h3>
-              <p>Скоро будет добавлен полный список участников семьи Celleste.</p>
-              <span class="btn btn-outline family-card-btn disabled-btn">Скоро</span>
+            <div class="tetris-controls">
+              <button class="tetris-btn" id="tetrisPauseBtn">Пауза</button>
+              <button class="tetris-btn" id="tetrisRestartBtn">Заново</button>
+            </div>
+            <div class="tetris-mobile-controls">
+              <button class="tetris-mobile-btn" data-tetris="left"><i class="fas fa-chevron-left"></i></button>
+              <button class="tetris-mobile-btn" data-tetris="right"><i class="fas fa-chevron-right"></i></button>
+              <button class="tetris-mobile-btn" data-tetris="rotate"><i class="fas fa-undo-alt"></i></button>
+              <button class="tetris-mobile-btn wide" data-tetris="hardDrop"><i class="fas fa-chevron-down"></i> <i class="fas fa-bolt"></i></button>
+            </div>
+            <div class="tetris-keys">
+              <span><kbd>←</kbd><kbd>→</kbd> движение</span>
+              <span><kbd>↑</kbd> поворот</span>
+              <span><kbd>↓</kbd> ускорение</span>
+              <span><kbd>Space</kbd> hard drop</span>
+              <span><kbd>P</kbd> пауза</span>
+              <span><kbd>R</kbd> рестарт</span>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- ===== CONTACTS ===== -->
+    <section class="page" id="page-contacts">
+      <div class="section contacts-section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag">Контакты</span>
+            <h2 class="section-title">Свяжитесь с нами</h2>
+            <div class="section-divider"></div>
+            <p class="section-desc">По всем вопросам вы можете обратиться к руководству семьи</p>
+          </div>
+          <div class="contacts-grid two-cols">
+            <div class="contact-card">
+              <div class="contact-icon"><i class="fab fa-discord"></i></div>
+              <h3>Discord</h3>
+              <p>Основной канал связи семьи Celleste</p>
+              <a href="https://discord.gg/wwBudd2e7d" target="_blank" class="contact-link">Присоединиться <i class="fas fa-external-link-alt"></i></a>
+            </div>
+            <div class="contact-card">
+              <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+              <h3>Email</h3>
+              <p>Для официальных обращений</p>
+              <a href="mailto:cellestefamily@gmail.com" class="contact-link">cellestefamily@gmail.com <i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
   </main>
 
@@ -213,7 +2492,7 @@
       <div class="footer-content">
         <div class="footer-brand">
           <span class="footer-logo">✦ Celleste</span>
-          <p>Семейная организация, основанная на единстве, чести и взаимном уважении.</p>
+          <p>Семья, основанная на единстве, чести и взаимном уважении.</p>
         </div>
         <div class="footer-links">
           <h4>Навигация</h4>
@@ -221,7 +2500,10 @@
             <li><a href="#home">Главная</a></li>
             <li><a href="#postulates">Постулаты</a></li>
             <li><a href="#members">Состав семьи</a></li>
-            <li><a href="#apply">Стать частью Celleste</a></li>
+            <li><a href="#location">Локация</a></li>
+            <li><a href="#apply">Заявка</a></li>
+            <li><a href="#tetris">Тетрис</a></li>
+            <li><a href="#contacts">Контакты</a></li>
           </ul>
         </div>
         <div class="footer-social">
@@ -233,15 +2515,31 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 Celleste Family. All rights reserved.</p>
+        <p>&copy; 2026 Celleste Family</p>
       </div>
     </div>
   </footer>
+
+  <div id="noRoleModal" class="no-role-modal" style="display:none">
+    <div class="no-role-modal-content">
+      <div class="no-role-modal-icon"><i class="fas fa-shield-halved"></i></div>
+      <h3>Доступ запрещён</h3>
+      <p>У вас нет роли <strong>Celleste</strong> в Discord. Только члены семьи могут войти на сайт.</p>
+      <div class="no-role-modal-actions">
+        <a href="#apply" class="btn btn-primary" id="noRoleApplyBtn">Подать заявку</a>
+        <button class="btn btn-outline" id="noRoleCloseBtn">Закрыть</button>
+      </div>
+    </div>
+  </div>
 
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script src="/js/firebase-config.js"></script>
+  <script src="/js/members-public.js"></script>
+  <script src="/js/public-edit.js"></script>
+  <script src="/js/apply-form.js"></script>
+  <script src="/js/tetris.js"></script>
   <script src="/js/app.js"></script>
 </body>
 </html>

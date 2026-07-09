@@ -1,11 +1,11 @@
-require('dotenv').config();
 const express = require('express');
 const session = require('cookie-session');
 const path = require('path');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
+const BASE_URL = process.env.BASE_URL || 'https://family-site-umber.vercel.app';
 const isProduction = BASE_URL.startsWith('https');
 
 app.set('trust proxy', 1);
@@ -20,7 +20,7 @@ app.use(session({
 }));
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
 const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
@@ -29,12 +29,6 @@ const VERIFIED_ROLE = process.env.VERIFIED_ROLE || 'Celleste';
 const BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
 const ADMIN_IDS = (process.env.ADMIN_IDS || '').split(',').filter(Boolean);
 const REDIRECT_URI = `${BASE_URL}/auth/discord/callback`;
-const REQUIRED_ENV = ['DISCORD_CLIENT_ID', 'DISCORD_CLIENT_SECRET', 'DISCORD_BOT_TOKEN', 'GUILD_ID'];
-const missing = REQUIRED_ENV.filter(k => !process.env[k]);
-if (missing.length) {
-  console.error('Ошибка: не заполнены переменные в .env:', missing.join(', '));
-  process.exit(1);
-}
 
 app.get('/auth/discord', (req, res) => {
   const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify%20guilds%20guilds.members.read`;
@@ -45,7 +39,6 @@ app.get('/auth/discord/callback', async (req, res) => {
   try {
     const { code } = req.query;
     if (!code) return res.redirect('/?error=no_code');
-
     const tokenRes = await fetch('https://discord.com/api/oauth2/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -60,14 +53,11 @@ app.get('/auth/discord/callback', async (req, res) => {
     });
     const tokenData = await tokenRes.json();
     if (!tokenData.access_token) return res.redirect('/?error=token_failed');
-
     const accessToken = tokenData.access_token;
-
     const userRes = await fetch('https://discord.com/api/users/@me', {
       headers: { Authorization: `Bearer ${accessToken}` }
     });
     const user = await userRes.json();
-
     let hasRole = false;
     let roleError = '';
     try {
@@ -98,20 +88,15 @@ app.get('/auth/discord/callback', async (req, res) => {
     } catch (e) {
       roleError = 'exception:' + e.message;
     }
-
     if (!hasRole) {
       return res.redirect('/?error=no_role');
     }
-
     req.session.user = {
       id: user.id,
       username: user.global_name || user.username,
       avatar: user.avatar
     };
     req.session.verified = true;
-
-    console.log(`[Celleste] User ${user.username} verified with Celleste role`);
-
     res.redirect('/member');
   } catch (err) {
     console.error('Auth error:', err);
@@ -125,10 +110,8 @@ app.get('/auth/logout', (req, res) => {
 });
 
 app.get('/member', (req, res) => {
-  if (!req.session.user) {
-    return res.redirect('/');
-  }
-  res.sendFile(path.join(__dirname, 'member.html'));
+  if (!req.session.user) return res.redirect('/');
+  res.sendFile(path.join(__dirname, '..', 'member.html'));
 });
 
 app.get('/api/me', (req, res) => {
@@ -142,9 +125,7 @@ app.get('/api/me', (req, res) => {
 });
 
 app.get('/api/config', (req, res) => {
-  res.json({
-    discordInvite: process.env.DISCORD_INVITE || '#'
-  });
+  res.json({ discordInvite: process.env.DISCORD_INVITE || '#' });
 });
 
 app.post('/api/save-user', async (req, res) => {
@@ -157,7 +138,7 @@ app.post('/api/save-user', async (req, res) => {
         discordId: { stringValue: id },
         username: { stringValue: username },
         verifiedAt: { stringValue: new Date().toISOString() },
-        role: { stringValue: process.env.VERIFIED_ROLE || 'Celleste' }
+        role: { stringValue: VERIFIED_ROLE }
       }
     };
     const checkRes = await fetch(`${firestoreUrl}&pageSize=1&filter=discordId=%3D%22${id}%22`);
@@ -169,7 +150,6 @@ app.post('/api/save-user', async (req, res) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       });
-      console.log(`[Celleste] User ${username} saved to family_members`);
     }
     res.json({ saved: true });
   } catch (err) {
@@ -196,11 +176,7 @@ app.get('/api/check-user', async (req, res) => {
         limit: 1
       }
     };
-    const resp = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
+    const resp = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
     const data = await resp.json();
     const found = data && data.length > 0 && data[0].document;
     res.json({ found: !!found });
@@ -210,10 +186,6 @@ app.get('/api/check-user', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`\n  🏠  Celleste Family Site`);
-  console.log(`  ─────────────────────`);
-  console.log(`  Локально:  http://localhost:${PORT}`);
-  if (isProduction) console.log(`  Продакшн:  ${BASE_URL}`);
-  console.log(`  Discord:   ${REDIRECT_URI}\n`);
-});
+app.get('/api/*', (req, res) => res.json({ error: 'not_found' }));
+
+module.exports = app;

@@ -48,50 +48,6 @@
     });
   }
 
-  /* ===== Logo click -> family overlay when verified ===== */
-  var familyLogoLink = document.getElementById('familyLogoLink');
-  var familyOverlay = document.getElementById('familyOverlay');
-  var familyOverlayClose = document.getElementById('familyOverlayClose');
-  var familyOverlayBackdrop = document.getElementById('familyOverlayBackdrop');
-
-  function openFamilyOverlay() {
-    if (familyOverlay) {
-      familyOverlay.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-    }
-  }
-
-  function closeFamilyOverlay() {
-    if (familyOverlay) {
-      familyOverlay.style.display = 'none';
-      document.body.style.overflow = '';
-    }
-  }
-
-  if (familyLogoLink) {
-    familyLogoLink.addEventListener('click', function (e) {
-      var badge = document.getElementById('familyBadge');
-      if (badge && badge.style.display !== 'none' && badge.style.display !== '') {
-        e.preventDefault();
-        openFamilyOverlay();
-      }
-    });
-  }
-
-  if (familyOverlayClose) {
-    familyOverlayClose.addEventListener('click', closeFamilyOverlay);
-  }
-
-  if (familyOverlayBackdrop) {
-    familyOverlayBackdrop.addEventListener('click', closeFamilyOverlay);
-  }
-
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && familyOverlay && familyOverlay.style.display === 'flex') {
-      closeFamilyOverlay();
-    }
-  });
-
   document.addEventListener('click', function (e) {
     if (navList && navList.classList.contains('open')) {
       if (!e.target.closest('.navbar')) {
@@ -106,116 +62,13 @@
     }
   });
 
-  /* ===== Auth ===== */
-  var DEMO_MEMBERS = [
-    { name: 'Основатель', role: 'Глава семьи', avatar: '👑' },
-    { name: 'Alice', role: 'Старший разработчик', avatar: '💻' },
-    { name: 'Bob', role: 'Backend-инженер', avatar: '⚙️' },
-    { name: 'Charlie', role: 'DevOps', avatar: '🚀' },
-    { name: 'Diana', role: 'Fullstack', avatar: '🌟' },
-    { name: 'Eve', role: 'Младший разработчик', avatar: '🌱' }
-  ];
-
-  document.getElementById('loginBtn').addEventListener('click', function () {
-    window.location.href = '/auth/discord';
-  });
-
-  document.getElementById('logoutBtn').addEventListener('click', function () {
-    window.location.href = '/auth/logout';
-  });
-
-  function showToast(message, type) {
-    type = type || 'success';
-    var toast = document.getElementById('toast');
-    if (!toast) {
-      toast = document.createElement('div');
-      toast.id = 'toast';
-      toast.className = 'toast';
-      document.body.appendChild(toast);
-    }
-    toast.textContent = message;
-    toast.className = 'toast ' + type;
-    toast.style.display = 'block';
-    clearTimeout(toast._timer);
-    toast._timer = setTimeout(function () { toast.style.display = 'none'; }, 4000);
+  /* ===== Login ===== */
+  var loginBtn = document.getElementById('loginBtn');
+  if (loginBtn) {
+    loginBtn.addEventListener('click', function () {
+      window.location.href = '/auth/discord';
+    });
   }
-
-  function updateUI(authData) {
-    var loginBtn = document.getElementById('loginBtn');
-    var userInfo = document.getElementById('userInfo');
-    var userName = document.getElementById('userName');
-    var verifiedElements = document.querySelectorAll('.verified-only');
-    var familyLogoIcon = document.getElementById('familyLogoIcon');
-    var familyBadge = document.getElementById('familyBadge');
-
-    function showVerified() {
-      verifiedElements.forEach(function (el) { el.style.display = 'block'; });
-      if (familyLogoIcon) familyLogoIcon.classList.add('verified');
-      if (familyBadge) familyBadge.style.display = 'inline-block';
-      if (!sessionStorage.getItem('family_overlay_shown')) {
-        sessionStorage.setItem('family_overlay_shown', '1');
-        openFamilyOverlay();
-      }
-    }
-
-    function hideVerified() {
-      verifiedElements.forEach(function (el) { el.style.display = 'none'; });
-      if (familyLogoIcon) familyLogoIcon.classList.remove('verified');
-      if (familyBadge) familyBadge.style.display = 'none';
-    }
-
-    if (authData.authenticated) {
-      loginBtn.style.display = 'none';
-      userInfo.style.display = 'flex';
-      userName.textContent = authData.user.username;
-
-      if (authData.verified) {
-        showVerified();
-
-        fetch('/api/save-user', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
-        }).catch(function () {});
-      } else {
-        if (authData.user && authData.user.id) {
-          checkFamilyMember(authData.user.id).then(function (found) {
-            if (found) {
-              showVerified();
-            } else {
-              hideVerified();
-              showToast('У вас нет роли Celleste. Обратитесь к руководству семьи.', 'error');
-            }
-          });
-        } else {
-          hideVerified();
-        }
-      }
-    } else {
-      loginBtn.style.display = 'inline-flex';
-      userInfo.style.display = 'none';
-      hideVerified();
-    }
-  }
-
-  /* ===== Init ===== */
-  async function init() {
-    var params = new URLSearchParams(window.location.search);
-    var error = params.get('error');
-    if (error === 'token_failed') showToast('Ошибка авторизации Discord', 'error');
-    if (error === 'no_code') showToast('Отсутствует код авторизации', 'error');
-    if (error === 'auth_failed') showToast('Ошибка при входе', 'error');
-
-    try {
-      var data = await fetch('/api/me').then(function (r) { return r.json(); });
-      updateUI(data);
-    } catch (e) {
-      updateUI({ authenticated: false });
-    }
-
-    firebaseAuth();
-  }
-
-  init();
 
   /* ===== Particles ===== */
   var particlesStarted = false;
@@ -230,9 +83,8 @@
     var mouse = { x: 0, y: 0 };
 
     function resize() {
-      var rect = canvas.parentElement.getBoundingClientRect();
-      canvas.width = rect.width;
-      canvas.height = rect.height;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     }
 
     resize();
@@ -285,7 +137,7 @@
         var pulseAlpha = p.alpha + Math.sin(p.pulse) * 0.1;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(230, 190, 106, ' + Math.max(0, pulseAlpha) + ')';
+        ctx.fillStyle = 'rgba(139, 92, 246, ' + Math.max(0, pulseAlpha) + ')';
         ctx.fill();
 
         for (var j = i + 1; j < particles.length; j++) {
@@ -299,7 +151,7 @@
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = 'rgba(230, 190, 106, ' + alpha + ')';
+            ctx.strokeStyle = 'rgba(139, 92, 246, ' + alpha + ')';
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -314,7 +166,7 @@
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = 'rgba(230, 190, 106, ' + mAlpha + ')';
+            ctx.strokeStyle = 'rgba(139, 92, 246, ' + mAlpha + ')';
           ctx.lineWidth = 0.5;
           ctx.stroke();
         }
@@ -337,6 +189,30 @@
       var y = ((e.clientY - rect.top) / rect.height) * 100;
       card.style.setProperty('--mouse-x', x + '%');
       card.style.setProperty('--mouse-y', y + '%');
+    });
+  });
+
+  /* ===== About card mouse tracking ===== */
+  var aboutCards = document.querySelectorAll('.about-card');
+  aboutCards.forEach(function (card) {
+    card.addEventListener('mousemove', function (e) {
+      var rect = card.getBoundingClientRect();
+      var x = ((e.clientX - rect.left) / rect.width) * 100;
+      var y = ((e.clientY - rect.top) / rect.height) * 100;
+      card.style.setProperty('--mx', x + '%');
+      card.style.setProperty('--my', y + '%');
+    });
+  });
+
+  /* ===== Contact card mouse tracking ===== */
+  var contactCards = document.querySelectorAll('.contact-card');
+  contactCards.forEach(function (card) {
+    card.addEventListener('mousemove', function (e) {
+      var rect = card.getBoundingClientRect();
+      var x = ((e.clientX - rect.left) / rect.width) * 100;
+      var y = ((e.clientY - rect.top) / rect.height) * 100;
+      card.style.setProperty('--cx', x + '%');
+      card.style.setProperty('--cy', y + '%');
     });
   });
 
